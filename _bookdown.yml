@@ -11,4 +11,3 @@ language:
     fig: "Figure "
     tab: "Table "
 rmd_subdir: false
-output_dir: answers
