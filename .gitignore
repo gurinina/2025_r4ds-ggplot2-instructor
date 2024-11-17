@@ -1,3 +1,16 @@
+# bookdown files
+_book
+_bookdown_files/
+2024_2024_r4ds-ggplot2-answers_files/
+2024_2024_r4ds-ggplot2-answers.Rmd
+viewer_output.Rmd
+css/epub.css
+render_all.R
+_epub
+_pdf
+r-for-data-science-workshop.html
+404.html
+
 # History files
 .Rhistory
 .Rapp.history
@@ -47,3 +60,4 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+.DS_Store

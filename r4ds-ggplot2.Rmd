@@ -1,13 +1,13 @@
 --- 
-title: "r4ds-ggplot2" 
+title: "2024_r4ds-ggplot2-answers" 
 knit: "bookdown::render_book"
 output:
   bookdown::gitbook: 
       number_sections: true
 date: "`r Sys.Date()`" 
 link-citations: yes 
-github-repo: gurinina/r4ds-ggplot2 
-url: https\://bookdown.org/ggiaever/r4ds-ggplot2 
+github-repo: gurinina/2024_r4ds-ggplot2-answers 
+url: https\://bookdown.org/ggiaever/2024_r4ds-ggplot2-answers 
 site: bookdown::bookdown_site 
 documentclass: book
 cover-image: "images/koos10.png"
