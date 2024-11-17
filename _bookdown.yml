@@ -2,8 +2,8 @@ book_filename: "2024_r4ds-ggplot2-answers"
 new_session: no
 rmd_files:
   - index.Rmd
-  - 01-layers-answers.Rmd
-  - 02-communication-answers.Rmd
+  - 01-communication-answers.Rmd
+  - 02-layers-answers.Rmd
 delete_merged_file: false
 chapter_name: "Chapter "
 language:

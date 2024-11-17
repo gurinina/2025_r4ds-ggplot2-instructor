@@ -12,6 +12,9 @@ documentclass: book
 cover-image: "images/koosggplot.png"
 ---
 
+```{r, include=FALSE}
+source("_common.R")
+```
 # R for data science workshop:  {-}
 
 <p align="center">

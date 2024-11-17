@@ -1,30 +1,21 @@
 # Communication {#sec-communication}
 Total points: 49
 
-```{r setup global preferences}
-source("_common.R")
-```
-
 ## Introduction
 
-For publishing purposes, you need to *communicate* your understanding to others.
-Your audience will likely not share your background knowledge and will not be deeply invested in the data.
-To help others quickly build up a good mental model of the data, you will need to invest considerable effort in making your plots as self-explanatory as possible.
-In this chapter, you'll learn some of the tools that ggplot2 provides to do so.
+For publishing purposes, you need to *communicate* your understanding to others. Your audience will likely not share your background knowledge and will not be deeply invested in the data. To help others quickly build up a good mental model of the data, you will need to invest considerable effort in making your plots as self-explanatory as possible. In this chapter, you'll learn some of the tools that `ggplot2` provides to do so.
 
-This chapter focuses on the tools you need to create good graphics.
-We assume that you know what you want, and just need to know how to do it.
-For that reason, we highly recommend pairing this chapter with a good general visualization book.
-We particularly like [The Truthful Art](https://www.amazon.com/gp/product/0321934075/), by Albert Cairo.
-It doesn't teach the mechanics of creating visualizations, but instead focuses on what you need to think about in order to create effective graphics.
+This chapter focuses on the tools you need to create good graphics. We assume that you know what you want, and just need to know how to do it. For that reason, we highly recommend pairing this chapter with a good general visualization book.
+
+We particularly like [The Truthful Art](https://www.amazon.com/gp/product/0321934075/), by Albert Cairo. It doesn't teach the mechanics of creating visualizations, but instead focuses on what you need to think about in order to create effective graphics.
 
 ### Prerequisites
 
-In this chapter, we'll focus once again on ggplot2.
-We'll also use a little **dplyr** for data manipulation, **scales** to override the default breaks, labels, transformations and palettes, and a few ggplot2 extension packages, including **ggrepel** ([https://ggrepel.slowkow.com](https://ggrepel.slowkow.com/)) by Kamil Slowikowski and **patchwork** ([https://patchwork.data-imaginist.com](https://patchwork.data-imaginist.com/)) by Thomas Lin Pedersen.
-Don't forget that you'll need to install those packages with `install.packages()` if you don't already have them.
+In this chapter, we'll focus once again on `ggplot2`. We'll also use a little **dplyr** for data manipulation, **scales** to override the default breaks, labels, transformations and palettes, and a few `ggplot2` extension packages, including **ggrepel** ([https://ggrepel.slowkow.com](https://ggrepel.slowkow.com/)) by Kamil Slowikowski and **patchwork** ([https://patchwork.data-imaginist.com](https://patchwork.data-imaginist.com/)) by Thomas Lin Pedersen.
 
-Uncomment the following line if you need to install any of these packages (you should have `tidyverse`:
+Don't forget that you'll need to install those packages with `install.packages()` if you haven't already done so.
+
+Uncomment the following line if you need to install any of these packages:
 
 ```{r}
 # install.packages(c("ggrepel","scales","ggthemes"))
@@ -32,7 +23,6 @@ Uncomment the following line if you need to install any of these packages (you s
 
 
 ```{r}
-#| label: setup
 
 library(tidyverse)
 library(scales)
@@ -43,8 +33,7 @@ library(ggthemes)
 
 ## Labels
 
-The easiest place to start when turning an exploratory graphic into an expository graphic is with good labels.
-You add labels with the `labs()` function.
+The easiest place to start when turning an exploratory graphic into an expository graphic is with good labels. You add labels with the `labs()` function, it's a little bit easier to use than `theme()` because it's designed to work with the `aes()` function.
 
 ```{r}
 
@@ -52,12 +41,7 @@ You add labels with the `labs()` function.
 #|   Scatterplot of highway fuel efficiency versus engine size of cars, where 
 #|   points are colored according to the car class. A smooth curve following 
 #|   the trajectory of the relationship between highway fuel efficiency versus 
-#|   engine size of cars is overlaid. The x-axis is labelled "Engine 
-#|   displacement (L)" and the y-axis is labelled "Highway fuel economy (mpg)". 
-#|   The legend is labelled "Car type". The plot is titled "Fuel efficiency 
-#|   generally decreases with engine size". The subtitle is "Two seaters 
-#|   (sports cars) are an exception because of their light weight" and the 
-#|   caption is "Data from fueleconomy.gov".
+#|   engine size of cars is overlaid. 
 
 ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point(aes(color = class)) +
@@ -67,7 +51,8 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
     y = "Highway fuel economy (mpg)",
     color = "Car type",
     title = "Fuel efficiency generally decreases with engine size",
-    subtitle = "Two seaters (sports cars) are an exception because of their light weight",
+    subtitle = "Two seaters (sports cars) are an exception because 
+    of their light weight",
     caption = "Data from fueleconomy.gov"
   )
 ```
@@ -76,6 +61,7 @@ The purpose of a plot title is to summarize the main finding.
 Avoid titles that just describe what the plot is, e.g., "A scatterplot of engine displacement vs. fuel economy".
 
 If you need to add more text, there are two other useful labels: `subtitle` adds additional detail in a smaller font beneath the title and `caption` adds text at the bottom right of the plot, often used to describe the source of the data.
+
 You can also use `labs()` to replace the axis and legend titles. Note the replacement of the legend title by "Car type" in the previous plot. It's usually a good idea to replace short variable names with more detailed descriptions, and to include the units.
 
 It's possible to use mathematical equations instead of text strings.
@@ -126,8 +112,7 @@ ggplot(
 
 </div>
 
-2. Recreate the following plot using the fuel economy data.
-    Note that both the colors and shapes of points vary by type of drive train. 6pts
+2. Recreate the following plot using the fuel economy data. Note that both the colors and shapes of points vary by type of drive train. 6pts
 
 
 ```{r}
@@ -166,19 +151,15 @@ ggplot(mpg, aes(
 
 ## Annotations
 
-In addition to labelling major components of your plot, it's often useful to label individual observations or groups of observations.
-The first tool you have at your disposal is `geom_text()`.
-`geom_text()` is similar to `geom_point()`, but it has an additional aesthetic: `label`.
-This makes it possible to add textual labels to your plots.
+In addition to labeling major components of your plot, it's often useful to label individual observations or groups of observations. The first tool you have at your disposal is `geom_text()`. `geom_text()` is similar to `geom_point()`, but it has an additional aesthetic: `label`. This makes it possible to add textual labels to your plots.
 
-There are two possible sources of labels.
-First, you might have a tibble that provides labels.
-In the following plot we pull out the cars with the highest engine size in each drive type and save their information as a new data frame called `label_info`.
+There are two possible sources of labels. First, you might have a tibble that provides labels. In the following plot we pull out the cars with the highest engine size in each drive type and save their information as a new data frame called `label_info`.
+
+`slice_head()` is a useful function from the **dplyr** package that allows you to select the first `n` rows of a data frame so when n = 1 it means the right-most point for each drive type.
+
+`case_when()` is a function that allows you to specify multiple conditions and their corresponding values in a single line of code. It's a more readable and concise way to write multiple `if_else()` statements.
 
 ```{r}
-
-# slice_head operates by group, so when n = 1 it means the size of the group
-# case_when where the left hand side determines which values match this case and the right hand side provides the replacement value.
 
 label_info <- mpg |>
   group_by(drv) |>
@@ -190,15 +171,14 @@ label_info <- mpg |>
       drv == "r" ~ "rear-wheel drive",
       drv == "4" ~ "4-wheel drive"
     )
-  ) |>
-  select(displ, hwy, drv, drive_type)
+  ) |> select(displ, hwy, drv, drive_type)
 
 label_info
 ```
 **Notice that `displ` values in `label_info` have captured the right-most point for each drive type.**
 
-Then, we use this new data frame to directly label the three groups to replace the legend with labels placed directly on the plot.
-Using the `fontface` and `size` arguments we can customize the look of the text labels.
+Then, we use this new data frame to directly label the three groups to replace the legend with labels placed directly on the plot. Using the `fontface` and `size` arguments we can customize the look of the text labels.
+
 They're larger than the rest of the text on the plot and bolded.
 (`theme(legend.position = "none"`) turns all the legends off --- we'll talk about it more shortly.)
 
@@ -226,8 +206,8 @@ ggplot(mpg, aes(x = displ, y = hwy, color = drv)) +
 Note the use of `hjust` (horizontal justification) and `vjust` (vertical justification) to control the alignment of the label.
 
 However the annotated plot we made above is hard to read because the labels overlap with each other, and with the points.
-We can use the `geom_label_repel()` function from the ggrepel package to address both of these issues.
-This useful package will automatically adjust labels so that they don't overlap:
+
+We can use the `geom_label_repel()` function from the ggrepel package to address both of these issues. This useful package will automatically adjust labels so that they don't overlap:
 
 ```{r}
 #| fig-alt: |
@@ -272,7 +252,7 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
   )
 ```
 
-Remember, in addition to `geom_text()` and `geom_label()`, you have many other geoms in ggplot2 available to help annotate your plot.
+Remember, in addition to `geom_text()` and `geom_label()`, you have many other `geoms` in `ggplot2` available to help annotate your plot.
 A couple ideas:
 
 -   Use `geom_hline()` and `geom_vline()` to add reference lines.
@@ -286,13 +266,14 @@ A couple ideas:
     Use aesthetics `x` and `y` to define the starting location, and `xend` and `yend` to define the end location.
 
 Another handy function for adding annotations to plots is `annotate()`.
-As a rule of thumb, geoms are generally useful for highlighting a subset of the data while `annotate()` is useful for adding one or few annotation elements to a plot.
+As a rule of thumb, `geoms` are generally useful for highlighting a subset of the data while `annotate()` is useful for adding one or few annotation elements to a plot.
 
 To demonstrate using `annotate()`, let's create some text to add to our plot.
 The text is a bit long, so we'll use `stringr::str_wrap()` to automatically add line breaks to it given the number of characters you want per line:
 
 ```{r}
-trend_text <- "Larger engine sizes tend to have lower fuel economy." |> str_wrap(width = 30)
+trend_text <- "Larger engine sizes tend to have lower fuel economy." |> 
+  str_wrap(width = 30)
 
 trend_text
 ```
@@ -421,8 +402,8 @@ g +  geom_text(
 ) + facet_wrap( ~ class)
 ```
 </div>
-
-    b) How can you add a label to a single facet? 2pts
+3.  
+    b). How can you add a label to a single facet? 2pts
     
 <div class="fold s o">
 **Ans-1.3.1.3b:**
@@ -449,7 +430,8 @@ ggplot(mpg, aes(displ, hwy)) +
 ```
 </div>
 
-    c) How can you put a different label in each facet? (Hint: Think about the dataset that is being passed to `geom_text()`.) 2pts
+3. 
+    c). How can you put a different label in each facet? (Hint: Think about the dataset that is being passed to `geom_text()`.) 2pts
     
 <div class="fold s o">
 **Ans-1.3.1.3c:**
@@ -528,12 +510,12 @@ ggplot(data=NULL)+
   )
 
 #length
-ggplot(data=NULL)+
+ggplot(data = NULL) +
   annotate(
     geom = "segment",
     x = 1, y = 1, xend = 10, yend = 10, color = "hotpink",
     arrow = arrow(length = unit(0.1, "inches"))
-  )+
+  ) +
   annotate(
     geom = "segment",
     x = 1, y = 2, xend = 9, yend = 10, color = "hotpink",
@@ -541,17 +523,17 @@ ggplot(data=NULL)+
   )
 
 #ends
-ggplot(data=NULL)+
+ggplot(data = NULL) +
   annotate(
     geom = "segment",
     x = 1, y = 1, xend = 10, yend = 10, color = "hotpink",
     arrow = arrow(ends = "both")
-  )+
+  ) +
   annotate(
     geom = "segment",
     x = 1, y = 2, xend = 9, yend = 10, color = "hotpink",
     arrow = arrow(ends = "last")
-  )+
+  ) +
   annotate(
     geom = "segment",
     x = 2, y = 1, xend = 10, yend = 9, color = "hotpink",
@@ -566,7 +548,7 @@ Scales control how the aesthetic mappings manifest visually.
 
 ### Default scales
 
-Normally, ggplot2 automatically adds scales for you.
+Normally, `ggplot2` automatically adds scales for you.
 For example, when you type:
 
 ```{r results='hide'}
@@ -577,7 +559,7 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point(aes(color = class))
 ```
 
-ggplot2 automatically adds default scales behind the scenes:
+`ggplot2` automatically adds default scales behind the scenes:
 
 ```{r fig.show='hide'}
 #| fig-show: "hide"
@@ -590,7 +572,9 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
 ```
 
 Note the naming scheme for scales: `scale_` followed by the name of the aesthetic, then `_`, then the name of the scale.
+
 The default scales are named according to the type of variable they align with: continuous, discrete, datetime, or date.
+
 `scale_x_continuous()` puts the numeric values from `displ` on a continuous number line on the x-axis, `scale_color_discrete()` chooses colors for each of the `class` of car, etc.
 There are lots of non-default scales which you'll learn about below.
 
@@ -711,30 +695,32 @@ Also note that the specification of breaks and labels for date and datetime scal
 You will most often use `breaks` and `labels` to tweak the axes.
 While they both also work for legends, there are a few other techniques you are more likely to use.
 
+
 To control the overall position of the legend, you need to use a `theme()` setting.
 We'll come back to themes at the end of the chapter, but in brief, they control the non-data parts of the plot.
+
 The theme setting `legend.position` controls where the legend is drawn:
 
-```{r}
-#| fig-width: 4
+```{r, out.width="80%"}
+#| fig-width: 10
+#| fig-asp: 0.5
 #| fig-alt: |
-#|   Four scatterplots of highway fuel efficiency versus engine size of cars 
-#|   where points are colored based on class of car. Clockwise, the legend 
+#|   Four scatterplots of highway fuel efficiency versus engine size of cars
+#|   where points are colored based on class of car. Clockwise, the legend
 #|   is placed on the right, left, top, and bottom of the plot.
 
-
 base <- ggplot(mpg, aes(x = displ, y = hwy)) +
-  geom_point(aes(color = class)) 
+  geom_point(aes(color = class))
 
- # the default  right, then left
+# the default  right, then left
 base + theme(legend.position = "right") +
-base + theme(legend.position = "left") 
+  base + theme(legend.position = "left")
 
- # then top, then bottom
-base + 
+# then top, then bottom
+base +
   theme(legend.position = "top") +
   guides(color = guide_legend(nrow = 3)) +
-base + 
+  base +
   theme(legend.position = "bottom") +
   guides(color = guide_legend(nrow = 3))
 ```
@@ -743,7 +729,11 @@ If your plot is short and wide, place the legend at the top or bottom, and if it
 You can also use `legend.position = "none"` to suppress the display of the legend altogether.
 
 To control the display of individual legends, use `guides()` along with `guide_legend()` or `guide_colorbar()`.
+`guide_legend()` is used for discrete scales, and `guide_colorbar()` is used for continuous scales.
+`guide_legend()` has a number of arguments that allow you to control the appearance of the legend.
+
 The following example shows two important settings: controlling the number of rows the legend uses with `nrow`, and overriding one of the aesthetics to make the points bigger.
+
 This is particularly useful if you have used a low `alpha` to display many points on a plot.
 
 ```{r}
@@ -767,6 +757,7 @@ Note that the name of the argument in `guides()` matches the name of the aesthet
 
 Instead of just tweaking the details a little, you can instead replace the scale altogether.
 There are two types of scales you're mostly likely to want to switch out: continuous position scales and color scales.
+
 Fortunately, the same principles apply to all the other aesthetics, so once you've mastered position and color, you'll be able to quickly pick up other scale replacements.
 
 It's very useful to plot transformations of your variable.
@@ -781,32 +772,44 @@ For example, it's easier to see the precise relationship between `carat` and `pr
 #|   are logged and the axis labels shows the logged values.
 
 # price vs. caret
-ggplot(diamonds, aes(x = carat, y = price)) +
-  geom_hex()
+p1 <- ggplot(diamonds, aes(x = carat, y = price)) +
+  geom_point()
 
 # log10 price vs log10 caret
-ggplot(diamonds, aes(x = log10(carat), y = log10(price))) + geom_hex()
+p2 <- ggplot(diamonds, aes(x = log10(carat), y = log10(price))) + geom_point()
+
+
+p1 + p2
 ```
 
+
+
 However, the disadvantage of this transformation is that the axes are now labelled with the transformed values, making it hard to interpret the plot.
+
 Instead of doing the transformation in the aesthetic mapping, we can instead do it with the scale.
+
 This is visually identical, except the axes are labelled on the original data scale.
 
-```{r}
+```{r, out.width="80%"}
 #| fig-alt: |
-#|   Plot of price versus carat of diamonds. Data binned and the color of 
-#|   the rectangles representing each bin based on the number of points that 
+#|   Plot of price versus carat of diamonds. Data binned and the color of
+#|   the rectangles representing each bin based on the number of points that
 #|   fall into that bin. The axis labels are on the original data scale.
 
 ggplot(diamonds, aes(x = carat, y = price)) +
-  geom_hex() + 
-  scale_x_log10() + 
+  geom_point() +
+  scale_x_log10() +
   scale_y_log10()
 ```
 
 Another scale that is frequently customized is color.
+
 The default categorical scale picks colors that are evenly spaced around the color wheel.
-Useful alternatives are the ColorBrewer scales which we have seen before and have been hand tuned to work better for people with common types of color blindness.
+Useful alternatives are the `RColorBrewer` scales which we have seen before and have been hand tuned to work better for people with common types of color blindness.
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6289f4d (work through)
 The two plots below look similar, but there is enough difference in the shades of red and green that the dots on the right can be distinguished even by people with red-green color blindness.[^communication-1]
 
 [^communication-1]: You can use a tool like [SimDaltonism](https://michelf.ca/projects/sim-daltonism/) to simulate color blindness to test these images.
@@ -816,16 +819,18 @@ The two plots below look similar, but there is enough difference in the shades o
 #| fig-alt: |
 #|   Two scatterplots of highway mileage versus engine size where points are 
 #|   colored by drive type. The first plot uses the default 
-#|   ggplot2 color palette and the plot on the right uses a different color 
+#|   `ggplot2` color palette and the plot on the right uses a different color 
 #|   palette.
 
 # default color palette
-ggplot(mpg, aes(x = displ, y = hwy)) +
+p1 <- ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point(aes(color = drv)) 
 
 # RColorBrewer palette
-ggplot(mpg, aes(x = displ, y = hwy)) + geom_point(aes(color = drv)) + 
+p2 <- ggplot(mpg, aes(x = displ, y = hwy)) + geom_point(aes(color = drv)) + 
   scale_color_brewer(palette = "Set1")
+
+p1 + p2
 ```
 
 Don't forget simpler techniques for improving accessibility.
@@ -836,7 +841,7 @@ This will also help ensure your plot is interpretable in black and white.
 #| fig-alt: |
 #|   Scatterplots of highway mileage versus engine size where both color 
 #|   and shape of points are based on drive type. The color palette is not 
-#|   the default ggplot2 palette.
+#|   the default `ggplot2` palette.
 
 ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point(aes(color = drv, shape = drv)) +
@@ -886,36 +891,6 @@ If you have a diverging scale, you can use `scale_color_gradient2()`.
 That allows you to give, for example, positive and negative values different colors.
 That's sometimes also useful if you want to distinguish points above or below the mean.
 
-Another option is to use the viridis color scales.
-The designers, Nathaniel Smith and Stéfan van der Walt, carefully tailored continuous color schemes that are perceptible to people with various forms of color blindness as well as perceptually uniform in both color and black and white.
-These scales are available as continuous (`c`), discrete (`d`), and binned (`b`) palettes in ggplot2.
-
-```{r}
-#| fig-width: 6
-#| fig-alt: |
-#|  Three plots.
-#|  The first plot uses the default, continuous 
-#|  ggplot2 scale. 
-#|  The second plot uses the viridis, continuous scale, and the 
-#|  third plot uses the viridis, binned scale.
-
-df <- tibble(
-  x = rnorm(10000),
-  y = rnorm(10000)
-)
-
-ggplot(df, aes(x, y, fill = x)) + geom_point(shape = 24, size = 3) +
-  labs(title = "Default, continuous", x = NULL, y = NULL)
-  
-ggplot(df, aes(x, y, fill = x)) + geom_point(shape = 24, size = 3)  + scale_fill_viridis_c() +
-  labs(title = "Viridis, continuous", x = NULL, y = NULL)
-
-ggplot(df, aes(x, y, fill = x)) + geom_point(shape = 24, size = 3)  + scale_fill_viridis_b() 
-  labs(title = "Viridis, binned", x = NULL, y = NULL)
-```
-
-Note that all color scales come in two varieties: `scale_color_*()` and `scale_fill_*()` for the `color` and `fill` aesthetics respectively (the color scales are available in both UK and US spellings).
-
 ### Zooming
 
 There are three ways to control the plot limits:
@@ -951,6 +926,9 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
 ```
 
 Let's compare these to the two plots below where the plot on the left sets the `limits` on individual scales and the plot on the right sets them in `coord_cartesian()`.
+
+`coord_cartesian()` is generally more useful if you want to zoom in on a region of the plot.
+
 We can see that reducing the limits is equivalent to subsetting the data.
 Therefore, to zoom in on a region of the plot, it's generally best to use `coord_cartesian()`. because it doesn't change the fitting of `geom_smooth`.
 
@@ -1042,7 +1020,7 @@ df <- tibble(x = rnorm(10000),
              y = rnorm(10000))
 
 ggplot(df) +
-  geom_point(aes(x = x, y = y,fill = x)) +
+  geom_point(aes(x = x, y = y, fill = x)) +
     scale_fill_gradient(low= "yellow", high = "red")
        
 ```
@@ -1124,7 +1102,7 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
   theme_classic()
 ```
 
-ggplot2 includes the eight themes shown in \@ref(fig:fig-themes), with `theme_gray()` as the default.[^communication-2]
+`ggplot2` includes the eight themes shown in \@ref(fig:fig-themes), with `theme_gray()` as the default.[^communication-2]
 Many more are included in add-on packages like **ggthemes** (<https://jrnold.github.io/ggthemes>), by Jeffrey Arnold.
 You can also create your own themes, if you are trying to match a particular corporate or journal style.
 
@@ -1133,9 +1111,9 @@ Many people wonder why the default theme has a gray background. This was a delib
 ```{r}
 #| label: fig-themes
 #| echo: false
-#| fig-cap: The eight themes built-in to ggplot2.
+#| fig-cap: The eight themes built-in to `ggplot2`.
 #| fig-alt: |
-#|   Eight barplots created with ggplot2, each 
+#|   Eight barplots created with `ggplot2`, each 
 #|   with one of the eight built-in themes: 
 #|   theme_bw() - White background with grid lines,
 #|   theme_light() - Light axes and grid lines,
@@ -1144,7 +1122,7 @@ Many people wonder why the default theme has a gray background. This was a delib
 #|   theme_dark() - Dark background for contrast, 
 #|   theme_minimal() - Minimal theme, no background,
 #|   theme_gray() - Gray background (default theme),
-#|   theme_void() - Empty theme, only geoms are visible.
+#|   theme_void() - Empty theme, only `geoms` are visible.
 
 knitr::include_graphics("images/visualization-themes.png")
 ```
@@ -1297,7 +1275,7 @@ Patchwork divides up the area you have allotted for your plot using this scale a
 #|   different drive trains" and captioned "Source: https://fueleconomy.gov". 
 #|   The first two plots are side-by-side box plots. Plots 3 and 4 are density 
 #|   plots. And the fifth plot is a faceted scatterplot. Each of these plots show 
-#|   geoms colored by drive train, but the patchworked plot has only one legend 
+#|   `geoms` colored by drive train, but the patchworked plot has only one legend 
 #|   that applies to all of them, above the plots and beneath the title.
 
 p1 <- ggplot(mpg, aes(x = drv, y = cty, color = drv)) + 
@@ -1417,6 +1395,6 @@ p1 / (p2 + p3) +
 In this chapter you've learned about adding plot labels such as title, subtitle, caption as well as modifying default axis labels, using annotation to add informational text to your plot or to highlight specific data points, customizing the axis scales, and changing the theme of your plot.
 You've also learned about combining multiple plots in a single graph using both simple and complex plot layouts.
 
-While you've so far learned about how to make many different types of plots and how to customize them using a variety of techniques, we've barely scratched the surface of what you can create with ggplot2.
-If you want to get a comprehensive understanding of ggplot2, we recommend reading the book, [*ggplot2: Elegant Graphics for Data Analysis*](https://ggplot2-book.org).
+While you've so far learned about how to make many different types of plots and how to customize them using a variety of techniques, we've barely scratched the surface of what you can create with `ggplot2`.
+If you want to get a comprehensive understanding of `ggplot2`, we recommend reading the book, [*ggplot2: Elegant Graphics for Data Analysis*](https://ggplot2-book.org).
 Other useful resources are the [*R Graphics Cookbook*](https://r-graphics.org) by Winston Chang and [*Fundamentals of Data Visualization*](https://clauswilke.com/dataviz/) by Claus Wilke.

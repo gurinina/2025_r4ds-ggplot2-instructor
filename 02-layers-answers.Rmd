@@ -1,24 +1,19 @@
 # Layers
 Total points: 71
 
-```{r setup global options}
-# setup global options
-source("_common.R")
-```
-
 ## Introduction
 
-In this chapter, you'll expand on your ggplot2 foundation as you learn about the layered grammar of graphics.
+In this chapter, you'll expand on your `ggplot2` foundation as you learn about the layered grammar of graphics.
 We'll start with a deeper dive into aesthetic mappings, geometric objects, and facets.
-Then, you will learn about statistical transformations ggplot2 makes under the hood when creating a plot.
+Then, you will learn about statistical transformations `ggplot2` makes under the hood when creating a plot.
 These transformations are used to calculate new values to plot, such as the heights of bars in a bar plot or medians in a box plot.
-You will also learn about position adjustments, which modify how geoms are displayed in your plots.
+You will also learn about position adjustments, which modify how `geoms` are displayed in your plots.
 
-We will not cover every single function and option for each of these layers, but we will walk you through the most important and commonly used functionality provided by ggplot2 as well as introduce you to packages that extend ggplot2.
+We will not cover every single function and option for each of these layers, but we will walk you through the most important and commonly used functionality provided by `ggplot2` as well as introduce you to packages that extend `ggplot2`.
 
 ### Prerequisites
 
-This chapter focuses on ggplot2.
+This chapter focuses on `ggplot2`.
 To access the datasets, help pages, and functions used in this chapter, first install the packages `patchwork` and `ggridges` if you need to by uncommenting this code:
 
 ```{r}
@@ -40,7 +35,7 @@ library(ggrepel)
 
 ## Aesthetic mappings
 
-The `mpg` data frame is bundled with the ggplot2 package and contains `r nrow(mpg)` observations on `r mpg %>% distinct(model) %>% nrow()` car models.
+The `mpg` data frame is bundled with the `ggplot2` package and contains `r nrow(mpg)` observations on `r mpg %>% distinct(model) %>% nrow()` car models.
 
 ```{r}
 #?mpg
@@ -158,13 +153,9 @@ Both of these produce warnings as well:
 
 Mapping an unordered discrete (categorical) variable (`class`) to an ordered aesthetic (`size` or `alpha`) is generally not a good idea because it implies a ranking that does not in fact exist.
 
-Once you map an aesthetic, `ggplot2` takes care of the rest.
-It selects a reasonable scale to use with the aesthetic, and it constructs a legend that explains the mapping between levels and values.
-For x and y aesthetics, `ggplot2` does not create a legend, but it creates an axis line with tick marks and a label.
-The axis line provides the same information as a legend; it explains the mapping between locations and values.
+Once you map an aesthetic, `ggplot2` takes care of the rest. It selects a reasonable scale to use with the aesthetic, and it constructs a legend that explains the mapping between levels and values. For x and y aesthetics, `ggplot2` does not create a legend, but it creates an axis line with tick marks and a label. The axis line provides the same information as a legend; it explains the mapping between locations and values.
 
-You can also set the visual properties of your `geom` manually as an argument of your `geom` function (*outside* of `aes()`) instead of relying on a variable mapping to determine the appearance.
-For example, we can make all of the points in our plot blue:
+You can also set the visual properties of your `geom` manually as an argument of your `geom` function (*outside* of `aes()`) instead of relying on a variable mapping to determine the appearance. For example, we can make all of the points in our plot blue:
 
 ```{r}
 #| fig-alt: |
@@ -223,11 +214,11 @@ ggplot(shapes, aes(x, y)) +
   theme(aspect.ratio = 1/2.75)
 ```
 
-So far we have discussed aesthetics that we can map or set in a scatterplot, when using a point geom.
-You can learn more about all possible aesthetic mappings in the aesthetic specifications vignette at <https://ggplot2.tidyverse.org/articles/ggplot2-specs.html>.
+So far we have discussed aesthetics that we can map or set in a scatterplot, when using a point geom. You can learn more about all possible aesthetic mappings in the aesthetic specifications vignette at <https://ggplot2.tidyverse.org/articles/ggplot2-specs.html>.
 
 The specific aesthetics you can use for a plot depend on the geom you use to represent the data.
-In the next section we dive deeper into geoms.
+
+In the next section we dive deeper into `geoms`.
 
 ### 2.2.1 Exercises {.unnumbered}
 
@@ -321,9 +312,11 @@ How are these two plots similar?
 ```{r}
 #| fig-show: hide
 
-(ggplot(mpg, aes(x = displ, y = hwy)) +  geom_point()) +
+p1 <- ggplot(mpg, aes(x = displ, y = hwy)) +  geom_point() 
 
-(ggplot(mpg, aes(x = displ, y = hwy)) + geom_smooth())
+p2 <- ggplot(mpg, aes(x = displ, y = hwy)) + geom_smooth()
+
+p1 + p2
 ```
 
 Both plots contain the same x variable, the same y variable, and both describe the same data. But the plots are not identical. Each plot uses a different geometric object, `geom`, to represent the data. The first plot uses the point geom, and the plot on the second uses the smooth geom, a smooth line fitted to the data.
@@ -333,10 +326,12 @@ To change the geom in your plot, change the geom function that you add to `ggplo
 ```{r}
 #| fig-width: 6
 # point
-ggplot(mpg, aes(x = displ, y = hwy)) + geom_point() +
+p1 <- ggplot(mpg, aes(x = displ, y = hwy)) + geom_point() 
 
 # smooth
-ggplot(mpg, aes(x = displ, y = hwy)) + geom_smooth()
+p2 <- ggplot(mpg, aes(x = displ, y = hwy)) + geom_smooth()
+
+p1 + p2
 ```
 
 Every geom function in ggplot2 takes a `mapping` argument, either defined locally in the geom layer or globally in the `ggplot()` layer.
@@ -344,6 +339,7 @@ Every geom function in ggplot2 takes a `mapping` argument, either defined locall
 However, not every aesthetic works with every geom. You could set the shape of a point, but you couldn't set the "shape" of a line. If you try, ggplot2 will silently ignore that aesthetic mapping. On the other hand, you *could* set the `linetype` of a line.
 
 `geom_smooth()` will draw a different line, with a different `linetype`, for each unique value of the variable that you map to `linetype`.
+
 
 ```{r}
 #| fig-width: 6
@@ -357,13 +353,16 @@ However, not every aesthetic works with every geom. You could set the shape of a
 #|   intervals around the smooth curves are also displayed.
 
 # Top
-(ggplot(mpg, aes(x = displ, y = hwy, shape = drv)) + 
-  geom_smooth()) /
+p1 <- ggplot(mpg, aes(x = displ, y = hwy, shape = drv)) + 
+  geom_smooth()
 
 # Bottom
-(ggplot(mpg, aes(x = displ, y = hwy, linetype = drv)) + 
-  geom_smooth())
+p2 <- ggplot(mpg, aes(x = displ, y = hwy, linetype = drv)) + 
+  geom_smooth()
+
+p1/p2
 ```
+
 
 Here, `geom_smooth()` separates the cars into three lines based on their `drv` value, which describes a car's drive train.
 One line describes all of the points that have a `4` value, one line describes all of the points that have an `f` value, and one line describes all of the points that have an `r` value.
@@ -386,19 +385,15 @@ ggplot(mpg, aes(x = displ, y = hwy, color = drv)) +
 
 ```
 
-Notice that this plot contains two geoms in the same graph.
+Notice that this plot contains two `geoms` in the same graph.
 
-Many geoms, like `geom_smooth()`, use a single geometric object to display multiple rows of data.
-For these geoms, you can set the `group` aesthetic to a categorical variable to draw multiple objects.
-ggplot2 will draw a separate object for each unique value of the grouping variable.
+Many `geoms`, like `geom_smooth()`, use a single geometric object to display multiple rows of data. For these `geoms`, you can set the `group` aesthetic to a categorical variable to draw multiple objects. ggplot2 will draw a separate object for each unique value of the grouping variable.
 
-In practice, ggplot2 will automatically group the data for these geoms whenever you map an aesthetic to a discrete variable (as in the `linetype` example).
+In practice, `ggplot2` will automatically group the data for these `geoms` whenever you map an aesthetic to a discrete variable (as in the `linetype` example).
 
-It is convenient to rely on this feature because the `group` aesthetic by itself does not add a legend or distinguishing features to the geoms.
+It is convenient to rely on this feature because the `group` aesthetic by itself does not add a legend or distinguishing features to the `geoms`.
 
-If you place mappings in a geom function, ggplot2 will treat them as local mappings for the layer.
-It will use these mappings to extend or overwrite the global mappings *for that layer only*.
-This makes it possible to display different aesthetics in different layers.
+If you place mappings in a geom function, `ggplot2` will treat them as local mappings for the layer. It will use these mappings to extend or overwrite the global mappings *for that layer only*. This makes it possible to display different aesthetics in different layers.
 
 ```{r}
 #| fig-alt: |
@@ -437,9 +432,7 @@ g + geom_point(
 )
 ```
 
-Geoms are the fundamental building blocks of ggplot2.
-You can completely transform the look of your plot by changing its geom, and different geoms can reveal different features of your data.
-For example, the histogram and density plot below reveal that the distribution of highway mileage is bimodal and right skewed while the boxplot reveals two potential outliers.
+`geoms` are the fundamental building blocks of `ggplot2`. You can completely transform the look of your plot by changing its geom, and different `geoms` can reveal different features of your data. For example, the histogram and density plot below reveal that the distribution of highway mileage is bimodal and right skewed while the boxplot reveals two potential outliers.
 
 ```{r}
 #| fig.width: 6
@@ -457,8 +450,7 @@ ggplot(mpg, aes(x = hwy)) + geom_density()
 ggplot(mpg, aes(x = hwy)) + geom_boxplot()
 ```
 
-ggplot2 provides more than 40 geoms but these don't cover all possible plots one could make.
-If you need a different geom, we recommend looking into extension packages first to see if someone else has already implemented it (see <https://exts.ggplot2.tidyverse.org/gallery/> for a sampling).
+`ggplot2` provides more than 40 `geoms` but these don't cover all possible plots one could make. If you need a different geom, we recommend looking into extension packages first to see if someone else has already implemented it (see <https://exts.ggplot2.tidyverse.org/gallery/> for a sampling).
 
 For example, the **ggridges** package ([https://wilkelab.org/ggridges](https://wilkelab.org/ggridges/){.uri}) is useful for making ridgeline plots, which can be useful for visualizing the density of a numerical variable for different levels of a categorical variable.
 
@@ -480,13 +472,12 @@ ggplot(mpg, aes(x = hwy, y = drv, fill = drv, color = drv)) +
   geom_density_ridges(alpha = 0.5, show.legend = FALSE)
 ```
 
-The best place to get a comprehensive overview of all of the geoms ggplot2 offers, as well as all functions in the package, is the reference page: <https://ggplot2.tidyverse.org/reference>.
+The best place to get a comprehensive overview of all of the `geoms` `ggplot2` offers, as well as all functions in the package, is the reference page: <https://ggplot2.tidyverse.org/reference>.
 To learn more about any single geom, use the help (e.g., `?geom_smooth`).
 
 ### 2.3.1 Exercises {.unnumbered}
 
-1.
-    a) What geom would you use to draw a line chart? A boxplot? A histogram? An area chart? 4pts
+1. a) What geom would you use to draw a line chart? A boxplot? A histogram? An area chart? 4pts
 
 ```{r, echo = FALSE}
 library(details)
@@ -495,7 +486,9 @@ library(details)
 ```{details,details.summary = "Ans-2.3.1.1a:",echo = F}
 library(stringr)
 library(xfun)
-raw_string(str_wrap("For a line chart you can use `geom_path()` or `geom_line()`. 
+raw_string(str_wrap(
+
+"For a line chart you can use `geom_path()` or `geom_line()`. 
                     
 For a boxplot you can use `geom_boxplot()`.
 
@@ -505,14 +498,14 @@ For an area chart, `geom_area()`.", width = 80))
 
 ```
 
-    b) Use the following ggplot to create 4 plots, `geom_line()`, `geom_boxplot()`, `geom_point()` and `geom_area()`. Include a title specifying the geometry for each. 4pts
+b) Use the following ggplot to create 4 plots, `geom_line()`, `geom_boxplot()`, `geom_point()` and `geom_area()`. Include a title specifying the geometry for each. 4pts
 
 ```{r}
 df <- data.frame(
   x = c(3, 1, 5), 
   y = c(2, 4, 6), 
-  label = c("a","b","c")
-)
+  label = c("a","b","c"))
+
 p <- ggplot(df, aes(x, y, label = label))  
   
 ```
@@ -952,7 +945,7 @@ ggplot(mpg) +
 
 Consider a basic bar chart, drawn with `geom_bar()` or `geom_col()`.
 The following chart displays the total number of diamonds in the `diamonds` dataset, grouped by `cut`.
-The `diamonds` dataset is in the ggplot2 package and contains information on \~54,000 diamonds, including the `price`, `carat`, `color`, `clarity`, and `cut` of each diamond.
+The `diamonds` dataset is in the `ggplot2` package and contains information on \~54,000 diamonds, including the `price`, `carat`, `color`, `clarity`, and `cut` of each diamond.
 The chart shows that more diamonds are available with high quality cuts than with low quality cuts.
 
 ```{r}
@@ -1006,7 +999,7 @@ For example, `?geom_bar` shows that the default value for `stat` is "count", whi
 If you scroll down, the section called "Computed variables" explains that it computes two new variables: `count` and `prop`.
 
 Every geom has a default stat; and every stat has a default geom.
-This means that you can typically use geoms without worrying about the underlying statistical transformation.
+This means that you can typically use `geoms` without worrying about the underlying statistical transformation.
 However, there are three reasons why you might need to use a stat explicitly:
 
 1. You might want to override the default stat. In the code below, we change the stat of `geom_bar()` from count (the default) to identity.This lets us map the height of the bars to the raw values of a y variable.
@@ -1057,7 +1050,7 @@ ggplot(diamonds) +
   ) 
 ```
 
-ggplot2 provides more than 20 stats for you to use.
+`ggplot2` provides more than 20 stats for you to use.
 Each stat is a function, so you can get help in the usual way, e.g., `?stat_bin`.
 
 ### 2.5.1 Exercises {.unnumbered}
@@ -1126,11 +1119,11 @@ group_by(class, .drop = FALSE) %>%  add_tally() %>%
 ```
 :::
 
-3. Most geoms and stats come in pairs that are almost always used in concert. Make a list of all the pairs. What do they have in common? (Hint: Read through the documentation.). Write the stat used for `geom_bar()`,`geom_smooth()` and `geom_boxplot()`. 3pts
+3. Most `geoms` and stats come in pairs that are almost always used in concert. Make a list of all the pairs. What do they have in common? (Hint: Read through the documentation.). Write the stat used for `geom_bar()`,`geom_smooth()` and `geom_boxplot()`. 3pts
 
 ```{details,details.summary = "Ans-2.5.1.3:",echo=F}
 
-print("Geoms and stats that are almost always used in concert are listed below:
+print("`geoms` and stats that are almost always used in concert are listed below:
 
 
 | **geom**                | **stat**                |
@@ -1312,7 +1305,7 @@ ggplot(mpg, aes(x = drv, color = class)) +
 ```
 
 ```         
-The identity position adjustment is more useful for 2d geoms, like points, where it is the default.
+The identity position adjustment is more useful for 2d `geoms`, like points, where it is the default.
 ```
 
 -   `position = "fill"` works like stacking, but makes each set of stacked bars the same height.
@@ -1379,7 +1372,7 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
 ```
 
 Adding randomness seems like a strange way to improve your plot, but while it makes your graph less accurate at small scales, it makes your graph *more* revealing at large scales.
-Because this is such a useful operation, ggplot2 comes with a shorthand for `geom_point(position = "jitter")`: `geom_jitter()`.
+Because this is such a useful operation, `ggplot2` comes with a shorthand for `geom_point(position = "jitter")`: `geom_jitter()`.
 
 To learn more about a position adjustment, look up the help page associated with each adjustment: `?position_dodge`, `?position_fill`, `?position_identity`, `?position_jitter`, and `?position_stack`.
 
@@ -1507,17 +1500,17 @@ ggplot(data = <DATA>) +
 ```
 
 Our new template takes seven parameters, the bracketed words that appear in the template.
-In practice, you rarely need to supply all seven parameters to make a graph because ggplot2 will provide useful defaults for everything except the data, the mappings, and the geom function.
+In practice, you rarely need to supply all seven parameters to make a graph because `ggplot2` will provide useful defaults for everything except the data, the mappings, and the geom function.
 
 The seven parameters in the template compose the grammar of graphics, a formal system for building plots.
 The grammar of graphics is based on the insight that you can uniquely describe *any* plot as a combination of a dataset, a geom, a set of mappings, a stat, a position adjustment, a coordinate system, a faceting scheme, and a theme.
 
 To see how this works, consider how you could build a basic plot from scratch: you could start with a dataset and then transform it into the information that you want to display (with a stat).
 Next, you could choose a geometric object to represent each observation in the transformed data.
-You could then use the aesthetic properties of the geoms to represent variables in the data.
+You could then use the aesthetic properties of the `geoms` to represent variables in the data.
 You would map the values of each variable to the levels of an aesthetic.
 These steps are illustrated in \@ref(fig:visualization-grammar).
-You'd then select a coordinate system to place the geoms into, using the location of the objects (which is itself an aesthetic property) to display the values of the x and y variables.
+You'd then select a coordinate system to place the `geoms` into, using the location of the objects (which is itself an aesthetic property) to display the values of the x and y variables.
 
 ```{r}
 #| label: visualization-grammar
@@ -1534,18 +1527,18 @@ You'd then select a coordinate system to place the geoms into, using the locatio
 knitr::include_graphics("images/visualization-grammar.png")
 ```
 
-At this point, you would have a complete graph, but you could further adjust the positions of the geoms within the coordinate system (a position adjustment) or split the graph into subplots (faceting).
+At this point, you would have a complete graph, but you could further adjust the positions of the `geoms` within the coordinate system (a position adjustment) or split the graph into subplots (faceting).
 You could also extend the plot by adding one or more additional layers, where each additional layer uses a dataset, a geom, a set of mappings, a stat, and a position adjustment.
 
 You could use this method to build *any* plot that you imagine.
 In other words, you can use the code template that you've learned in this chapter to build hundreds of thousands of unique plots.
 
-If you'd like to learn more about the theoretical underpinnings of ggplot2, you might enjoy reading "[The Layered Grammar of Graphics](https://vita.had.co.nz/papers/layered-grammar.pdf)", the scientific paper that describes the theory of ggplot2 in detail.
+If you'd like to learn more about the theoretical underpinnings of `ggplot2`, you might enjoy reading "[The Layered Grammar of Graphics](https://vita.had.co.nz/papers/layered-grammar.pdf)", the scientific paper that describes the theory of `ggplot2` in detail.
 
 ## Summary
 
-In this chapter you learned about the layered grammar of graphics starting with aesthetics and geometries to build a simple plot, facets for splitting the plot into subsets, statistics for understanding how geoms are calculated, position adjustments for controlling the fine details of position when geoms might otherwise overlap, and coordinate systems which allow you to fundamentally change what `x` and `y` mean.
+In this chapter you learned about the layered grammar of graphics starting with aesthetics and geometries to build a simple plot, facets for splitting the plot into subsets, statistics for understanding how `geoms` are calculated, position adjustments for controlling the fine details of position when `geoms` might otherwise overlap, and coordinate systems which allow you to fundamentally change what `x` and `y` mean.
 
-Two very useful resources for getting an overview of the complete ggplot2 functionality are the ggplot2 cheatsheet (which you can find at <https://posit.co/resources/cheatsheets>) and the ggplot2 package website ([https://ggplot2.tidyverse.org](https://ggplot2.tidyverse.org/)).
+Two very useful resources for getting an overview of the complete `ggplot2` functionality are the `ggplot2` cheatsheet (which you can find at <https://posit.co/resources/cheatsheets>) and the `ggplot2` package website ([https://ggplot2.tidyverse.org](https://ggplot2.tidyverse.org/)).
 
-An important lesson you should take from this chapter is that when you feel the need for a geom that is not provided by ggplot2, it's always a good idea to look into whether someone else has already solved your problem by creating a ggplot2 extension package that offers that geom.
+An important lesson you should take from this chapter is that when you feel the need for a geom that is not provided by `ggplot2`, it's always a good idea to look into whether someone else has already solved your problem by creating a `ggplot2` extension package that offers that geom.
