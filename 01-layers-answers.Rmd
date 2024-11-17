@@ -27,13 +27,16 @@ To access the datasets, help pages, and functions used in this chapter, first in
 
 ```
 
-Then load the `tidyverse`, `scales` and `patchwork` packages by into your session:
+Then load the necessary packages into your session:
 
 ```{r}
 library(tidyverse)
 library(patchwork)
 library(scales)
+library(ggplot2)
+library(ggrepel)
 ```
+
 
 ## Aesthetic mappings
 
@@ -67,7 +70,8 @@ We can do this with a scatterplot where the numerical variables are mapped to th
 #| fig-asp: 0.4
 #| fig-show: hold
 #| fig-alt: |
-#|   Two scatterplots next to each other, both visualizing highway fuel #|   efficiency versus engine size of cars and showing a negative 
+#|   Two scatterplots next to each other, both visualizing highway fuel 
+#|   efficiency versus engine size of cars and showing a negative 
 #|   association. In the plot on the left class is mapped to the color 
 #|   aesthetic, resulting in different colors for each class. 
 #|   In the plot on the right class is mapped the shape aesthetic, 
@@ -76,7 +80,7 @@ We can do this with a scatterplot where the numerical variables are mapped to th
 #|   mapping between color or shape and levels of the class variable.
 
 ggplot(mpg, aes(x = displ, y = hwy, color = class)) +
-  geom_point() + ggplot(mpg, aes(x = displ, y = hwy, shape = class)) + geom_point() + plot_layout(ncol = 2)
+  geom_point() + ggplot(mpg, aes(x = displ, y = hwy, shape = class)) + geom_point() +   plot_layout(ncol = 2)
 ```
 
 Note the use of `plot_layout` from the `patchwork` package to layout the plots in two rows.
@@ -87,7 +91,8 @@ Use `+` to plot them side-by-side:
 ```{r}
 #| fig-width: 10
 #| fig-asp: 0.4
-ggplot(mpg, aes(x = displ, y = hwy, color = class)) + geom_point() + ggplot(mpg, aes(x = displ, y = hwy, shape = class)) + geom_point() 
+ggplot(mpg, aes(x = displ, y = hwy, color = class)) + geom_point() + 
+  ggplot(mpg, aes(x = displ, y = hwy, shape = class)) + geom_point() 
 ```
 
 Use '/' to plot them in one column:
@@ -316,23 +321,19 @@ How are these two plots similar?
 ```{r}
 #| fig-show: hide
 
-ggplot(mpg, aes(x = displ, y = hwy)) +  geom_point()
+(ggplot(mpg, aes(x = displ, y = hwy)) +  geom_point()) +
 
-ggplot(mpg, aes(x = displ, y = hwy)) + geom_smooth()
+(ggplot(mpg, aes(x = displ, y = hwy)) + geom_smooth())
 ```
 
-Both plots contain the same x variable, the same y variable, and both describe the same data.
-But the plots are not identical.
-Each plot uses a different geometric object, `geom`, to represent the data.
-The first plot uses the point geom, and the plot on the second uses the smooth geom, a smooth line fitted to the data.
+Both plots contain the same x variable, the same y variable, and both describe the same data. But the plots are not identical. Each plot uses a different geometric object, `geom`, to represent the data. The first plot uses the point geom, and the plot on the second uses the smooth geom, a smooth line fitted to the data.
 
-To change the geom in your plot, change the geom function that you add to `ggplot()`.
-For instance, to make the plots above, you can use the following code:
+To change the geom in your plot, change the geom function that you add to `ggplot()`. For instance, to make the plots above, you can use the following code:
 
 ```{r}
 #| fig-width: 6
 # point
-ggplot(mpg, aes(x = displ, y = hwy)) + geom_point() 
+ggplot(mpg, aes(x = displ, y = hwy)) + geom_point() +
 
 # smooth
 ggplot(mpg, aes(x = displ, y = hwy)) + geom_smooth()
@@ -340,10 +341,7 @@ ggplot(mpg, aes(x = displ, y = hwy)) + geom_smooth()
 
 Every geom function in ggplot2 takes a `mapping` argument, either defined locally in the geom layer or globally in the `ggplot()` layer.
 
-However, not every aesthetic works with every geom.
-You could set the shape of a point, but you couldn't set the "shape" of a line.
-If you try, ggplot2 will silently ignore that aesthetic mapping.
-On the other hand, you *could* set the `linetype` of a line.
+However, not every aesthetic works with every geom. You could set the shape of a point, but you couldn't set the "shape" of a line. If you try, ggplot2 will silently ignore that aesthetic mapping. On the other hand, you *could* set the `linetype` of a line.
 
 `geom_smooth()` will draw a different line, with a different `linetype`, for each unique value of the variable that you map to `linetype`.
 
@@ -359,12 +357,12 @@ On the other hand, you *could* set the `linetype` of a line.
 #|   intervals around the smooth curves are also displayed.
 
 # Top
-ggplot(mpg, aes(x = displ, y = hwy, shape = drv)) + 
-  geom_smooth()
+(ggplot(mpg, aes(x = displ, y = hwy, shape = drv)) + 
+  geom_smooth()) /
 
 # Bottom
-ggplot(mpg, aes(x = displ, y = hwy, linetype = drv)) + 
-  geom_smooth()
+(ggplot(mpg, aes(x = displ, y = hwy, linetype = drv)) + 
+  geom_smooth())
 ```
 
 Here, `geom_smooth()` separates the cars into three lines based on their `drv` value, which describes a car's drive train.
