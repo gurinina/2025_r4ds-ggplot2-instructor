@@ -1,0 +1,20 @@
+--- 
+title: "r4ds-ggplot2" 
+knit: "bookdown::render_book"
+output:
+  bookdown::gitbook: 
+      number_sections: true
+date: "`r Sys.Date()`" 
+link-citations: yes 
+github-repo: gurinina/r4ds-ggplot2 
+url: https\://bookdown.org/ggiaever/r4ds-ggplot2 
+site: bookdown::bookdown_site 
+documentclass: book
+cover-image: "images/koos10.png"
+---
+
+# R for data science workshop {-}
+
+This website us the ggplot visulization sections of Hadley Wickham's book [2nd edition of "R for Data Science"](https://r4ds.hadley.nz/).
+
+![](images/koos10.png)

@@ -1,0 +1,15 @@
+book_filename: "r4ds-ggplot2"
+new_session: no
+rmd_files:
+  - index.Rmd
+  - 01-communication-answers.Rmd
+  - 02-layers-answers.Rmd
+  - 03-dummy-script.Rmd
+delete_merged_file: false
+chapter_name: "Chapter "
+language:
+  label:
+    fig: "Figure "
+    tab: "Table "
+rmd_subdir: false
+output_dir: answers
