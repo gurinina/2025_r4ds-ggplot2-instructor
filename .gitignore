@@ -33,7 +33,7 @@ r-for-data-science-workshop.html
 
 # RStudio files
 .Rproj.user/
-
+*.RProj
 # produced vignettes
 vignettes/*.html
 vignettes/*.pdf
