@@ -3,13 +3,14 @@ _book
 _bookdown_files/
 2024_r4ds-ggplot2-answers_files/
 2024_r4ds-ggplot2-answers.Rmd
-viewer_output.Rmd
-css/epub.css
-render_all.R
 _epub
 _pdf
 r-for-data-science-workshop.html
 404.html
+01-communication-answers_files
+02-layers_files
+scripts/viewer_output.Rmd
+r-for-data-science-workshop.html
 
 # History files
 .Rhistory

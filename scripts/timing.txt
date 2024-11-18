@@ -1,0 +1,31 @@
+Layers: 30' no exercises
+
+51' up to statistical TF
+
+Communication: 45' 1hr 15'
+
+GO 31
+
+This module is about ggplot2.
+The first chapter is more about the principles of effective ggplots (e.g. labels, layout annotation) while the second chapter is more about the types of ggplot2 geoms that are commonly used in the field of statistics and what happens under the hood of ggplot2.
+
+
+mpg greater the engine size displacement the lower the mpg
+
+For publishing purposes, you need to be able to communicate the
+data effectively to others.
+
+This chapter focuses on what you need to think about to create effective graphics.
+
+We all know about the power of ggplot2's layered grammar of graphics, but we need to think about the principles of effective graphics.
+
+The principles of effective graphics are:
+1. Show the data
+2. Reduce clutter
+3. Focus attention where you want it
+4. Think about the audience
+5. Tell a story
+6. Make the data stand out
+7. Use a consistent style
+
+The chapter is divided into three sections: the first section discusses the principles of effective graphics, the second section discusses the types of graphics that are commonly used in the field of statistics, and the third section discusses how to create graphics using R.
