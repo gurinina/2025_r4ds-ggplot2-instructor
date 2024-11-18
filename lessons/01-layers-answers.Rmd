@@ -75,7 +75,8 @@ categorical variable is mapped to an aesthetic like `color` or `shape`
 
 ggplot(mpg, aes(x = displ, y = hwy, color = class)) +
   geom_point() +
-  ggplot(mpg, aes(x = displ, y = hwy, shape = class)) + geom_point() + 
+  ggplot(mpg, aes(x = displ, y = hwy, shape = class)) + 
+  geom_point() + 
   plot_layout(ncol = 2)
 ```
 
@@ -99,7 +100,8 @@ Use '/' to plot them in one column:
 #| fig.width: 7
 #| out-width: "100%"
 
-(ggplot(mpg, aes(x = displ, y = hwy, color = class)) + geom_point())/ (ggplot(mpg, aes(x = displ, y = hwy, shape = class)) + geom_point())
+(ggplot(mpg, aes(x = displ, y = hwy, color = class)) + geom_point())/ 
+  (ggplot(mpg, aes(x = displ, y = hwy, shape = class)) + geom_point())
 ```
 
 Notice that parentheses are required for this operation unless you first save the plots:

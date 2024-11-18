@@ -1,15 +1,19 @@
---- 
-title: "2024_r4ds-ggplot2-answers" 
+---
+title: "2024_r4ds-ggplot2-answers"
 knit: "bookdown::render_book"
 output:
-  bookdown::gitbook: 
-      number_sections: true
-link-citations: yes 
-github-repo: gurinina/2024_r4ds-ggplot2-answers 
-url: https\://bookdown.org/ggiaever/2024_r4ds-ggplot2-answers 
-site: bookdown::bookdown_site 
-documentclass: book
-cover-image: "images/koosggplot.png"
+  bookdown::gitbook:
+    css: [css/git.css, css/toc.css]      # Custom CSS files
+    config:
+      toc:
+        collapse: section                # Collapsible Table of Contents
+      download: ["pdf", "epub"]          # Enable download links for PDF and EPUB
+link-citations: yes                      # Enable citation links
+github-repo: "gurinina/2024_r4ds-ggplot2-answers" # GitHub repo for linking
+url: 'https://bookdown.org/ggiaever/2024_r4ds-ggplot2-answers/' # Published book URL
+site: bookdown::bookdown_site            # Bookdown-specific site configuration
+documentclass: book                      # Use book formatting for PDF output
+cover-image: "images/koosggplot.png"     # Custom cover image
 ---
 
 ```{r, include=FALSE}

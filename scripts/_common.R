@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
 options(
   dplyr.print_min = 6,
   dplyr.print_max = 6,
-  width = 60
+  width = 80
 )
 
 # Setting ggplot2 theme
