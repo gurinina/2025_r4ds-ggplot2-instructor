@@ -1,65 +1,53 @@
-% Load necessary packages this works for 2024_r4ds-ggplot2-instructor.tex
+% Load necessary packages
 \usepackage{graphicx}    % For including images
 \usepackage{amsmath}     % For advanced math typesetting
 \usepackage{hyperref}    % For creating hyperlinks
-\usepackage{float}       % For precise float placement
-\usepackage{adjustbox}   % For adjusting boxes, including figures and tables
-\usepackage{caption}     % For better control over captions
-\usepackage{placeins}    % Allows \FloatBarrier command to manage float placement
+\usepackage{fancyvrb}    % For verbatim environments and code blocks
+\usepackage{longtable}   % For long tables
+\usepackage{booktabs}    % For better table formatting
+\usepackage{listings}    % For better code formatting
+\usepackage{caption}     % To control figure captions
+\usepackage{float}       % For figure placement control
 
-% Load the geometry package once with desired options
-\usepackage[a4paper, margin=1in]{geometry}  % Set 1-inch margins for A4 paper
+% Remove extra pages between chapters
+\let\cleardoublepage\clearpage
 
-\usepackage{lscape}      % For landscape orientation (if needed)
+% Suppress List of Figures (LoF) and List of Tables (LoT)
+\renewcommand{\listoffigures}{}
+\renewcommand{\listoftables}{}
 
-\usepackage{adjustbox}
-\newcommand{\defaultimage}[1]{\includegraphics[width=\linewidth, keepaspectratio]{#1}}
+% Custom LaTeX figure handling to suppress Alt text as captions in PDF output
+\DeclareCaptionFormat{empty}{\relax}   % Define an empty caption format
+\captionsetup[figure]{format=empty}    % Apply the empty caption format to figures
 
-% Custom commands
-\newcommand{\vect}[1]{\boldsymbol{#1}}  % Command to bold vectors
+% Set default image width for LaTeX (adjustable)
+\setkeys{Gin}{width=0.8\textwidth}     % Default width for images (adjustable as needed)
+
+% Configure listings to handle code formatting
+\lstset{
+  language=R,              % Set the default language (R, Python, etc.)
+  breaklines=true,          % Enable automatic line breaks
+  breakatwhitespace=true,   % Break lines at whitespace if possible
+  basicstyle=\small\ttfamily, % Use small monospaced font for code
+  commentstyle=\itshape\ttfamily, % Italic monospaced font for comments
+  columns=fullflexible,     % Flexibility for proper line wrapping
+  keepspaces=true,          % Preserve spaces and indentation
+  frame=single              % Add a frame around code blocks
+}
 
 % Custom formatting
 \setlength{\parindent}{0pt}             % Remove paragraph indentation
 \setlength{\parskip}{1em}               % Add space between paragraphs
 
-% Adjusted float settings to prevent "float too large for page" warnings
-\setlength{\textfloatsep}{10pt plus 2pt minus 2pt}  % Adjust space between floats and text
-\setlength{\intextsep}{10pt plus 2pt minus 2pt}     % Adjust space between in-text floats and text
-\setlength{\floatsep}{12pt plus 2pt minus 2pt}      % Adjust space between floats
+% Page geometry - load only once with options
+\usepackage[top=1in, left=0.5in, right=0.5in, bottom=1in]{geometry}
 
-% Maximum float dimensions
-\renewcommand{\floatpagefraction}{.7}  % Up to 70% of a float page can be floats
-\renewcommand{\textfraction}{.1}        % At least 10% of text on a page
-\renewcommand{\topfraction}{.8}         % Up to 80% of a top page can be floats
-\renewcommand{\bottomfraction}{.7}      % Up to 70% of a bottom page can be floats
+% Custom commands
+\newcommand{\vect}[1]{\boldsymbol{#1}}  % Command to bold vectors
 
-% Place floats exactly in the text with the float package
-\floatplacement{figure}{H}  % Forces figures to be placed exactly where they appear in the text
-\floatplacement{table}{H}    % Forces tables to be placed exactly where they appear in the text
-
-% Title page setup (optional)
-\title{\Huge My Custom Title Page}
-\author{\Large Author Name}
-\date{\today}
-
-\usepackage{listings}
-\lstset{
-  breaklines=true,
-  breakatwhitespace=false,
-  basicstyle=\ttfamily\small,
-  frame=single,
+% PDF-specific settings
+\hypersetup{
+  colorlinks=true,                       % Enable colored links in the PDF
+  linkcolor=blue,                        % Color for internal links
+  urlcolor=cyan                          % Color for external links
 }
-
-\usepackage{emptypage} % This will suppress the page number on empty pages.
-
-% Remove default behavior to start chapters on a new page
-\let\oldchapter\chapter
-\renewcommand{\chapter}{\newpage\oldchapter}
-
-
-\usepackage{titlesec} % Customizes section titles
-\titleformat{\chapter}[display]
-  {\normalfont\huge\bfseries} % Chapter formatting
-  {Chapter \thechapter}        % Label
-  {0pt}                        % Space before the title
-  {\Huge}                      % Space after the title
