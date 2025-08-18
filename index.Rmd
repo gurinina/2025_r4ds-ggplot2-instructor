@@ -18,14 +18,13 @@ cover-image: "images/koosggplot.png"     # Custom cover image
 
 ```{r, include=FALSE}
 source("scripts/_common.R")
+source("scripts/setup.R")
 ```
 # R for data science workshop:  {-}
 
 <p align="center">
   <img src="images/koosggplot.png" alt="Welcome to Omics Science!" width="300" />
 </p>
-
-The published version for this module can be found on my bookdown site [2024_r4ds-ggplot2-answers](https://bookdown.org/ggiaever/2024_r4ds-ggplot2-answers/).
 
 This module is based on the Data visualization chapter in Hadley Wickham's book [2nd edition of "R for Data Science"](https://r4ds.hadley.nz/)(see README.md).
 
