@@ -7,7 +7,9 @@ Communication: 1hr no exercises
 GO 31
 
 This module is about ggplot2.
-The first chapter is more about the principles of effective ggplots (e.g. labels, layout annotation) while the second chapter is more about the types of ggplot2 geoms that are commonly used in the field of statistics and what happens under the hood of ggplot2.
+The first chapter is more about the principles of effective ggplots (e.g. labels, layout annotation)
+while the second chapter is more about the types of ggplot2 geoms that are commonly used in the field
+of statistics and what happens under the hood of ggplot2.
 
 
 mpg greater the engine size displacement the lower the mpg
@@ -28,4 +30,6 @@ The principles of effective graphics are:
 6. Make the data stand out
 7. Use a consistent style
 
-The chapter is divided into three sections: the first section discusses the principles of effective graphics, the second section discusses the types of graphics that are commonly used in the field of statistics, and the third section discusses how to create graphics using R.
+The chapter is divided into three sections: the first section discusses the principles of effective graphics, 
+the second section discusses the types of graphics that are commonly used in the field of statistics, 
+and the third section discusses how to create graphics using R.

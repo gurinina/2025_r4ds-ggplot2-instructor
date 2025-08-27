@@ -8,7 +8,7 @@ Total points: 67
 
 ## Introduction
 
-In this chapter, you'll expand on your `ggplot2` foundation as you learn about the layered grammar of graphics. We'll start with a deeper dive into aesthetic mappings, geometric objects, and facets. Then, you will learn about statistical transformations `ggplot2` makes under the hood when creating a plot. These transformations are used to calculate new values to plot, such as the heights of bars in a bar plot or medians in a box plot. You will also learn about  position adjustments, which modify how `geoms` are displayed in your plots.
+ggplot2 is based on the grammar of graphics, the idea that you can build every graph from the same components: a data set, a coordinate system, and geoms—visual marks that represent data points. In this chapter, you'll expand on your `ggplot2` foundation. We'll start with a deeper dive into aesthetic mappings, geometric objects, and facets. Then, you will learn about statistical transformations `ggplot2` makes under the hood when creating a plot. These transformations are used to calculate new values to plot, such as the heights of bars in a bar plot or medians in a box plot. You will also learn about  position adjustments, which modify how `geoms` are displayed in your plots.
 
 We will not cover every single function and option for each of these layers, but we will walk you through the most important and commonly used functionality provided by `ggplot2` as well as introduce you to packages that extend `ggplot2`.
 
@@ -49,7 +49,7 @@ names(mpg)
 
 Among the variables in `mpg` are:
 
-1. `displ`: A car's engine size, in liters. A numerical variable.
+1. `displ`: A car's engine size (displacement), in liters. A numerical variable.
 
 2. `hwy`: A car's fuel efficiency on the highway, in miles per gallon
     (mpg). A car with a low fuel efficiency consumes more fuel than a
@@ -148,9 +148,10 @@ You'll need to pick a value that makes sense for that aesthetic:
 
 -   The name of a color as a character string, e.g., `color = "blue"`
 -   The size of a point in mm, e.g., `size = 1`
--   The shape of a point as a number, e.g, `shape = 1`, as shown in \@ref(fig:fig-shapes).
+-   The shape of a point as a number, e.g, `shape = 1`, as shown in Figure \@ref(fig:fig-shapes)
 
-```{r fig-shapes, echo=FALSE, fig.asp=0.364, fig.align='center'}
+
+```{r fig-shapes, echo=FALSE, fig.asp=0.364, fig.align='center', fig.cap='Mapping between shapes and their numeric codes.'}
 
 shapes <- tibble(
   shape = c(0, 1, 2, 5, 3, 4, 6:19, 20, 21, 22, 23, 24),
@@ -172,6 +173,83 @@ So far we have discussed aesthetics that we can map or set in a scatterplot, whe
 
 The specific aesthetics you can use for a plot depend on the `geom` you use to represent the data.
 
+
+::: {.infobox .tip}
+### Where do aesthetics go in ggplot2?
+
+Think of aesthetics in ggplot2 like this:
+
+```
+          +-----------------------------+
+          | ggplot(aes(...))            |
+          |                             |
+          |  ✅ Variable mappings       |
+          |     (from your data)        |
+          |     e.g. aes(x = displ,     |
+          |              y = hwy,       |
+          |              color = class) |
+          |                             |
+          |  ❌ NOT for constants!      |
+          +-----------------------------+
+
+                 |
+                 v
+          +-----------------------------+
+          | geom_point(aes(...))        |
+          |                             |
+          |  ✅ Local variable mappings |
+          |     (override or add)       |
+          |     e.g. aes(shape = drv)   |
+          +-----------------------------+
+
+                 |
+                 v
+          +-----------------------------+
+          | geom_point(..., outside aes)|
+          |                             |
+          |  ✅ Fixed constants         |
+          |     (same for all points)   |
+          |     e.g. color = "pink",    |
+          |          shape = 24,        |
+          |          size = 3           |
+          +-----------------------------+
+```
+
+#### Examples
+
+- **Variable mapping (inside aes)**  
+```{r}
+  ggplot(mpg, aes(displ, hwy, color = class)) +
+    geom_point()
+```
+
+- **Fixed constants (outside aes)**  
+```{r}
+  ggplot(mpg, aes(displ, hwy)) +
+    geom_point(color = "pink", shape = 24, size = 3)
+```
+:::
+.
+
+If you wanted to use the numerical shapes the code would be this:
+```{r}
+library(ggplot2)
+library(patchwork)
+
+# top: color mapping, no issue
+p1 <- ggplot(mpg, aes(displ, hwy, color = class)) +
+  geom_point(size = 2.5)
+
+# bottom: shape mapping, override default 6-shape limit
+p2 <- ggplot(mpg, aes(displ, hwy, shape = class)) +
+  geom_point(size = 2.5) +
+  scale_shape_manual(values = c(0, 1, 2, 3, 4, 5, 6))  # 7 shapes
+
+p1 / p2
+```
+
+So far we have discussed aesthetics that we can map or set in a scatterplot, when using a point `geom`. You can learn more about all possible aesthetic mappings in the aesthetic specifications vignette at <https://ggplot2.tidyverse.org/articles/ggplot2-specs.html>.
+
 In the next section we dive deeper into `geoms`.
 
 ### 2.2.1 Exercises {.unnumbered}
@@ -182,7 +260,7 @@ In the next section we dive deeper into `geoms`.
 ```{r Ans:2.2.1.1}
 
 ggplot(mpg, aes(x = hwy, y = displ)) +
-  geom_point(color = "pink", shape = "triangle")
+  geom_point(color = "pink", shape = 24, size = 3, fill = "blue")
 ```
 :::
 
@@ -346,7 +424,7 @@ g <- ggplot(mpg, aes(x = displ, y = hwy)) +
 
 g + geom_point(
   data = mpg %>% filter(class == '2seater'),
-  shape = "circle open",
+  shape = "triangle open",
   size = 3,
   color = "red"
 )

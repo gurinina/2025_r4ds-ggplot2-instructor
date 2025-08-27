@@ -239,8 +239,6 @@ The text is a bit long, so we'll use `stringr::str_wrap()` to automatically add 
 ```{r}
 trend_text <- "Larger engine sizes tend to have lower fuel economy." |> 
   str_wrap(width = 30)
-
-trend_text
 ```
 
 Then, we add two layers of annotation: one with a label `geom` and the other with a segment geom.

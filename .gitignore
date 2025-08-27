@@ -1,10 +1,16 @@
+# Ignore everything under student_notes, but keep a placeholder so the folder exists
+student_notes/*
+!student_notes/.gitkeep
+
+# Ignore the output folder (where the book is built)
 # bookdown files
-_book
+_book/
+_pdf/
+_epub/
 _bookdown_files/
-2024_r4ds-ggplot2-answers_files/
-2024_r4ds-ggplot2-answers.Rmd
-_epub
-_pdf
+2025_r4ds-ggplot2-answers_files/
+2025_r4ds-ggplot2-answers.Rmd
+
 r-for-data-science-workshop.html
 404.html
 01-communication-answers_files
