@@ -25,6 +25,20 @@ bookdown::pdf_book:
   lot: false    # Disable List of Tables
 
 bookdown::epub_book:
-  fig_caption: false  # Disable figure captions in EPUB output
+  fig_caption: false
   epub_version: "epub3"
-
+  pandoc_args: ["--wrap=none"]
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

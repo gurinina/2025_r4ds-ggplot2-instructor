@@ -183,13 +183,13 @@ Think of aesthetics in ggplot2 like this:
           +-----------------------------+
           | ggplot(aes(...))            |
           |                             |
-          | Variable mappings           |
+          |  ✅ Variable mappings       |
           |     (from your data)        |
           |     e.g. aes(x = displ,     |
           |              y = hwy,       |
           |              color = class) |
           |                             |
-          | NOT for constants!          |
+          |  ❌ NOT for constants!      |
           +-----------------------------+
 
                  |
@@ -197,7 +197,7 @@ Think of aesthetics in ggplot2 like this:
           +-----------------------------+
           | geom_point(aes(...))        |
           |                             |
-          | Local variable mappings     |
+          |  ✅ Local variable mappings |
           |     (override or add)       |
           |     e.g. aes(shape = drv)   |
           +-----------------------------+
@@ -207,7 +207,7 @@ Think of aesthetics in ggplot2 like this:
           +-----------------------------+
           | geom_point(..., outside aes)|
           |                             |
-          | Fixed constants             |
+          |  ✅ Fixed constants         |
           |     (same for all points)   |
           |     e.g. color = "pink",    |
           |          shape = 24,        |
@@ -256,13 +256,10 @@ In the next section we dive deeper into `geoms`.
 
 1. Create a scatterplot of `hwy` vs. `displ` where the points are pink filled in triangles. +2pts
 
-::: {.fold .s .o}
-```{r Ans:2.2.1.1}
+```{r}
+# Your answer here
 
-ggplot(mpg, aes(x = hwy, y = displ)) +
-  geom_point(color = "pink", shape = 24, size = 3, fill = "pink")
 ```
-:::
 
 2. Why did the following code not result in a plot with blue points? +2pts
 
@@ -272,45 +269,17 @@ ggplot(mpg) +
   geom_point(aes(x = displ, y = hwy, color = "blue"))
 ```
 
-::: {.fold .s .o}
-**Ans-2.2.1.2:**
+**Your answer here:**
 
-```{r}
-
-
-# Color should be set outside of the aesthetic mapping. 
-
-# If you check what's going inside aes(), you find displ (your x variable), and hwy (your y variable). How does "blue" fit in here? It actually doesn't. 
-
-ggplot(mpg) +
-  geom_point(aes(x = displ, y = hwy), color = "blue")
-
-# This creates a single category called "blue" that gets mapped to a default color (not actually blue).
-# If there's only one value, it's a fixed aesthetic property, not a data mapping, so it belongs outside aes()!
-# This is one of the most important ggplot2 concepts to understand.
-```
-:::
 
 3. What does the `stroke` aesthetic do? What shapes does it work with? (Hint: use `?geom_point`) +2pts
 
-::: {.fold .s .o}
-**Ans-2.2.1.3:**
+**Your answer here:**
 
 ```{r}
+# Your code here
 
-# Stroke controls the width of the edge/border for the shapes (21-25)
-# that have a fill aesthetic.
- 
-ggplot(mpg) +  geom_point(
-  aes(x = displ, y = hwy),
-  shape = 24,
-  fill = "purple",
-  color = "red",
-  stroke = 2,
-  size = 8
-)
 ```
-:::
 
 4. What happens if you map an aesthetic to something other than a variable name, like `aes(color = displ < 5)`? Try it by adding color to the following plot: +2pts
 
@@ -320,30 +289,12 @@ ggplot(mpg) + geom_point(aes(x = displ, y = hwy))
 
 ```
 
-::: {.fold .s .o}
-**Ans-2.2.1.4:**
+**Your answer here:**
 
 ```{r}
+# Your code here
 
-# It creates a logical variable with values `TRUE` and `FALSE` for cars with displacement values below and above 5. 
-
-# Notice color is inside aes() and not outside.
-
-ggplot(mpg) + 
-  geom_point(aes(x = displ, y = hwy, color = displ < 5)) 
 ```
-:::
-
-**The rule:**
-
-Inside aes() - when color varies by data:
-- Different colors for different classes: `aes(color = class)` # Multiple values: "suv", "compact", etc.
-- Different colors for different logical values: `aes(color = hwy > 30)` # Two values: TRUE, FALSE  
-- Color gradient based on numbers: `aes(color = cty)` # Multiple values: 15, 18, 21, etc.
-
-Outside aes() - when color is constant for all points:
-- All points the same color: `geom_point(aes(x = displ, y = hwy), color = "blue")`
-- All points red: `geom_point(aes(x = displ, y = hwy), color = "red")`
 
 ## Geometric objects
 
@@ -404,7 +355,6 @@ Here, `4` stands for four-wheel drive, `f` for front-wheel drive, and `r` for re
 If this sounds strange, we can make it clearer by overlaying the lines on top of the raw data and then coloring everything according to `drv`.
 
 ```{r fig.width = 6}
-
 ggplot(mpg, aes(x = displ, y = hwy, color = drv)) +
   geom_point() + geom_smooth(aes(linetype = drv))
 
@@ -413,7 +363,7 @@ ggplot(mpg, aes(x = displ, y = hwy, color = drv)) +
 Notice that this plot contains two `geoms` in the same graph.
 
 You can use the same idea to specify different `data` for each layer.
-Here, we use red points as well as open triangles to highlight two-seater cars.
+Here, we use red points as well as open circles to highlight two-seater cars.
 The local data argument in `geom_point()` overrides the global data argument in `ggplot()` for that layer only.
 
 ```{r}
@@ -467,17 +417,8 @@ To learn more about any single `geom`, use the help (e.g., `?geom_smooth`).
 1. 
     a) What `geom` would you use to draw a line chart? A boxplot? A histogram? An area chart? +4pts
 
-::: {.fold .s .o}
-**Ans-2.3.1.1a:**
+**Your answer here:**
 
-For a line chart you can use `geom_path()` or `geom_line()`. 
-                    
-For a boxplot you can use `geom_boxplot()`.
-
-For a histogram, `geom_histogram()`.
-
-For an area chart, `geom_area()`.
-:::
 
 1.
     b) Use the following ggplot to create 4 plots, `geom_line()`, `geom_boxplot()`, `geom_point()` and `geom_area()`. Include a title specifying the geometry for each. +4pts
@@ -492,17 +433,10 @@ p <- ggplot(df, aes(x, y, label = label))
   
 ```
 
-::: {.fold .s .o}
-**Ans-2.3.1.1b:**
+```{r}
+# Your code here
 
-```{r fig.width = 5, fig.align = "center"}
-
-p + geom_line() + ggtitle("line")
-p + geom_boxplot() + ggtitle("boxplot")
-p + geom_point() + ggtitle("point")
-p + geom_area() + ggtitle("area")
 ```
-:::
 
 2. Earlier in this chapter we used `show.legend` without explaining it:
 
@@ -514,75 +448,29 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
 
 What does `show.legend = FALSE` do here? What happens if you remove it? Try it. +2pts
 
+**Your answer here:**
 
-::: {.fold .s .o}
-**Ans-2.3.1.2:**
+```{r}
+# Your code here
 
-```{r fig.width = 5, fig.align = "center"}
-# It removes the legend for the `geom` it's specified in, in this case it removes the legend for the smooth lines that are colored based on `drv`.
-
-# If you remove `show.legend`, it will show the legend as the default is show.legend = T.
-
-ggplot(mpg, aes(x = displ, y = hwy)) +
-  geom_smooth(aes(color = drv))
 ```
-:::
 
 3. What does the `se` argument to `geom_smooth()` do? +2pts
 
-::: {.fold .s .o}
-**Ans-2.3.1.3:**
+**Your answer here:**
 
-It displays the confidence interval around the smooth line.
-You can remove this with `se = FALSE`.
-:::
 
-4. Recreate the R code necessary to generate and save the following graph \@ref(fig:6-plots) and arrange them in a figure with 2 columns. Note that wherever a categorical variable is used in the plot, it's `drv`. Use the mathematical notation in one, and the function from `patchwork`, `plot_layout` in another for laying out the plot. +6pts
+4. Recreate the R code necessary to generate and save the following graph and arrange them in a figure with 2 columns. Note that wherever a categorical variable is used in the plot, it's `drv`. Use the mathematical notation in one, and the function from `patchwork`, `plot_layout` in another for laying out the plot. +6pts
 
 ```{r 6-plots, echo = FALSE, out.width = "100%", fig.cap = 'Six plots arranged in two columns'}
 
 knitr::include_graphics("images/6-plots.png")
 ```
 
-::: {.fold .s .o}
-**Ans-2.3.1.4:**
-
 ```{r}
-
-p1 <- ggplot(mpg, aes(x = displ, y = hwy)) + 
-      geom_point() + 
-      geom_smooth(se = FALSE)
-p2 <- ggplot(mpg, aes(x = displ, y = hwy)) + 
-      geom_smooth(aes(group = drv), se = FALSE) +
-      geom_point()
-p3 <- ggplot(mpg, aes(x = displ, y = hwy, color = drv)) + 
-      geom_point() + 
-      geom_smooth(se = FALSE)
-p4 <- ggplot(mpg, aes(x = displ, y = hwy)) + 
-      geom_point(aes(color = drv)) + 
-      geom_smooth(se = FALSE)
-p5 <- ggplot(mpg, aes(x = displ, y = hwy)) + 
-      geom_point(aes(color = drv)) +
-      geom_smooth(aes(linetype = drv), se = FALSE)
-p6 <- ggplot(mpg, aes(x = displ, y = hwy)) + 
-      geom_point(size = 4, color = "white") + 
-      geom_point(aes(color = drv)) 
-    
-    
-# Combine the plots
-    
-(p1 + p2) / (p3 + p4) / (p5 + p6)
-    
-# OR
-
-library(patchwork)
-p1 + p2 + p3 + p4 + p5 + p6 +
-  plot_layout(ncol = 2)
+# Your code here
 
 ```
-:::
-
-**Notice the plots don't line up as nicely if you don't use the `plot_layout` function from patchwork because of the figure legends.**
 
 ## Facets
 
@@ -668,17 +556,12 @@ ggplot(mpg, aes(x = drv, y = cyl)) + geom_point()
      
 ```
 
-::: {.fold .s .o}
-**Ans-2.4.1.1:**
+**Your answer here:**
 
 ```{r}
+# Your code here
 
-# Faceting by a continuous variable results in one facet per each unique value of the continuous variable. We can see this in the scatterplot below of `cyl` vs. `drv`, faceted by `hwy`.
-
-ggplot(mpg, aes(x = drv, y = cyl)) + geom_point() +
-  facet_wrap( ~ hwy)
 ```
-:::
 
 2. Run the following code and facet on drv vs cyl. What do the empty cells mean? +2pts
 
@@ -687,21 +570,12 @@ ggplot(mpg, aes(x = drv, y = cyl)) + geom_point() +
 ggplot(mpg) + geom_point(aes(x = drv, y = cyl))
 ```
 
-::: {.fold .s .o}
-**Ans-2.4.1.2:**
+**Your answer here:**
 
-```{r fig.width = 6.5}
+```{r}
+# Your code here
 
-# There are no cars with rear-wheel drive and 5 cylinders, for example. 
-
-# Therefore the facet corresponding to that combination is empty. 
-
-# In general, empty facets mean no observations fall in that category.
-
-ggplot(mpg) + geom_point(aes(x = drv, y = cyl)) +
-  facet_grid(drv ~ cyl)
 ```
-:::
 
 3. What plots does the following code make? What does `.` do? +2pts
 
@@ -717,25 +591,8 @@ ggplot(mpg) +
   facet_grid(. ~ cyl)
 ```
 
-::: {.fold .s .o}
-**Ans-2.4.1.3:**
+**Your answer here:**
 
-```{r fig.width = 6}
-
-# In the first plot, with `facet_grid(drv ~ .)`, the period means "don't facet across columns". 
-
-# In the second plot, with `facet_grid(. ~ drv)`, the period means "don't facet across rows". 
-
-
-ggplot(mpg) +
-  geom_point(aes(x = displ, y = hwy)) +
-  facet_grid(drv ~ .)
-
-ggplot(mpg) +
-  geom_point(aes(x = displ, y = hwy)) +
-  facet_grid(. ~ cyl)
-```
-:::
 
 4. Take the first faceted plot in this section:
 
@@ -750,11 +607,8 @@ ggplot(mpg) +
 4. 
     a) What are the advantages to using faceting instead of the color aesthetic? What are the disadvantages? +2pts
 
-::: {.fold .s .o}
-**Ans-2.4.1.4a:**
+**Your answer here:**
 
-The advantages of faceting is seeing each class of car separately, without any overplotting. The disadvantage is not being able to compare the classes to each other as easily when they're in separate plots. Additionally, color can be helpful for easily telling classes apart. Using both can be helpful, but doesn't mitigate the issue of easy comparison across classes. If we were interested in a specific class, e.g. compact cars, it would be useful to highlight that group only with an additional layer.
-:::
 
 4.
     b) What if you were interested in a specific class, e.g. compact cars? How would you highlight that group using only an additional layer added to the plot below? +2pts
@@ -765,42 +619,17 @@ The advantages of faceting is seeing each class of car separately, without any o
 ggplot(mpg, aes(x = displ, y = hwy)) + geom_point(color = "pink") 
 ```
 
-::: {.fold .s .o}
-**Ans-2.4.1.4b:**
+**Your answer here:**
 
-```{r fig.width = 7, fig.show='hold'}
+```{r}
+# Your code here
 
-    # facet
-ggplot(mpg) +
-  geom_point(aes(x = displ, y = hwy)) +
-  facet_wrap( ~ class, nrow = 2)
-
-# color
-ggplot(mpg) +
-  geom_point(aes(x = displ, y = hwy, color = class))
-
-# both
-
-ggplot(mpg) +
-  geom_point(aes(x = displ, y = hwy, color = class),
-    show.legend = FALSE) +
-    facet_wrap(~ class, nrow = 2)
-
-# highlighting
-ggplot(mpg, aes(x = displ, y = hwy)) +
-  geom_point(color = "gray") +
-  geom_point(data = mpg |> filter(class == "compact"),
-    color = "pink")
 ```
-:::
 
 5. Read `?facet_wrap`. What does `nrow` do? What does `ncol` do? What other options control the layout of the individual panels? Why doesn't `facet_grid()` have `nrow` and `ncol` arguments? +2pts
 
-::: {.fold .s .o}
-**Ans-2.4.1.5:**
+**Your answer here:**
 
-`nrow` controls the number of rows and `ncol` controls the number of columns the panels should be arranged in. `facet_grid()` does not have these arguments because the number of rows and columns are determined by the number of levels of the two categorical variables. `facet_wrap` also has a `dir` argument which controls whether the panels should be arranged horizontally or vertically.
-:::
 
 6. Which of the following plots makes it easier to compare engine size (`displ`) across cars with different drive trains? What does this say about when to place a faceting variable across rows or columns? +2pts
 
@@ -816,11 +645,8 @@ ggplot(mpg, aes(x = displ)) +
   facet_grid(. ~ drv)
 ```
 
-::: {.fold .s .o}
-**Ans-2.4.1.6:**
+**Your answer here:**
 
-The first plot makes it easier to compare engine size (`displ`) across cars with different drive trains because the axis that plots `displ` is shared across the panels. What this says is that if the goal is to make comparisons based on a given variable, that variable should be placed on the shared axis.
-:::
 
 7. Recreate the following plot using `facet_wrap()` instead of `facet_grid()`. How do the positions of the facet labels change? +2pts
 
@@ -831,22 +657,12 @@ ggplot(mpg) +
   facet_grid(drv ~ .)
 ```
 
-::: {.fold .s .o}
-**Ans-2.4.1.7:**
+**Your answer here:**
 
-```{r fig.width = 6, fig.height = 6, fig.show = 'hold', out.width = "50%"}
+```{r}
+# Your code here
 
-# The facet labels in `facet_grid` are on the side of each row, in `facet_wrap` the labels are on top of each row.
-
-ggplot(mpg) +
-  geom_point(aes(x = displ, y = hwy)) +
-  facet_grid(drv ~ .)
-
-ggplot(mpg) +
-  geom_point(aes(x = displ, y = hwy)) +
-  facet_wrap(drv ~ .)
 ```
-:::
 
 8. Modify the facet label in the following plot so that it has a background color of `navy` with a `red` outline and `white` text. +2pts
 
@@ -858,26 +674,10 @@ ggplot(mpg) +
   facet_grid(drv ~ .)
 ```
 
-::: {.fold .s .o}
-**Ans-2.4.1.8:**
+```{r}
+# Your code here
 
-```{r fig.width = 6, fig.height = 6, out.width = "80%"}
-
-ggplot(mpg) +
-  geom_point(aes(x = displ, y = hwy)) +
-  facet_grid(drv ~ .) +
-  theme(
-    strip.text.y = element_text(
-      colour = "white"
-    ),
-    strip.background = element_rect(
-      colour = "red",
-      fill = "navy",
-      linewidth  = 2
-    )
-  )
 ```
-:::
 
 ## Statistical transformations
 
@@ -964,64 +764,21 @@ Each stat is a function, so you can get help in the usual way, e.g., `?stat_bin`
 1. 
     a) What does `geom_col()` do? How is it different from `geom_bar()`? +2pts
 
-::: {.fold .s .o}
-**Ans-2.5.1.2a:**
+**Your answer here:**
 
-`geom_bar()` uses stat_count() by default: it counts the number of occurrences for each x value or category. It doesn't expect a y-value, since it's going to count that up itself. 
-                    
-`geom_col` is the same as geom_bar(stat = 'identity'), so if your data contains groups x and the count for each group y, you can just use this function instead.
-
-`geom_col()` can be used to make a bar plot from a data frame that represents a frequency table, while `geom_bar()` can be used to make a bar plot from a data frame where each row is an observation.
-:::
 
 1.
     b) Plot mpg and count the classes in drv. Compare `geom_bar` to `geom_col`. +2pts
 
-::: {.fold .s .o}
-**Ans-2.5.1.2b:**
-
-```{r fig.width = 5}
-
-ggplot(mpg) + geom_bar(aes(fill = drv,x = class))
-
-# OR
-
-ggplot(mpg) + geom_bar(aes(fill = drv,x = class), position = "dodge")
-
-
-# `geom_col`
-
-mpg |>
-group_by(class, .drop = FALSE) |>  add_tally() |> 
-  ungroup()  |> 
-  ggplot(aes(fill = drv, x = class, y = n)) +
-  geom_col()
-
+```{r}
+# Your code here
 
 ```
-:::
 
 2. Most `geoms` and stats come in pairs that are almost always used in concert. Make a list of 5 pairs. What do they have in common? (Hint: Read through the documentation.). Write the stat used for `geom_bar()`,`geom_smooth()` and `geom_boxplot()`. +5pts
 
-::: {.fold .s .o}
-**Ans-2.5.1.3:**
+**Your answer here:**
 
-`geoms` and stats that are almost always used in concert are listed below:
-
-| **geom**                | **stat**                |
-|-------------------------|-------------------------|
-| `geom_bar()`            | `stat_count()`          |
-| `geom_bin2d()`          | `stat_bin_2d()`         |
-| `geom_boxplot()`        | `stat_boxplot()`        |
-| `geom_count()`          | `stat_sum()`            |
-| `geom_density()`        | `stat_density()`        |
-| `geom_dotplot()`        | `stat_bindot()`         |
-| `geom_function()`       | `stat_function()`       |
-| `geom_smooth()`         | `stat_smooth()`         |
-| `geom_violin()`         | `stat_ydensity()`       |
-| `geom_hex()`            | `stat_bin_hex()`        |
-| `geom_quantile()`       | `stat_quantile()`       |
-:::
 
 3. 
     a) In our proportion bar chart, we needed to set `group = 1`. Why? In other words, what is the problem with these two graphs? Replot the two plots below using a `group` variable so that it plots correctly. +2pts 
@@ -1035,22 +792,12 @@ ggplot(diamonds, aes(
 
 ```
 
-::: {.fold .s .o}
-**Ans-2.5.1.5a:**
+**Your answer here:**
 
-```{r fig.width = 6}
-
-# The problem with this plot is that the proportions are calculated by `geom_bar` within the cut categories so they will be equal to 1 (ie: what proportion of "Fair" is in "Fair"). By forcing the group to be 1, the proper proportions as part of the total number of observations will be displayed.
-
-# Setting `group = 1` results in the correct proportions of `cut`s being plotted. 
-
-ggplot(diamonds, aes(
-  x = cut, y = after_stat(prop), group = 1
-  )) + 
-  geom_bar()
+```{r}
+# Your code here
 
 ```
-:::
 
 3. 
     b)  Replot the plot below without using a `group` aesthetic. Instead of using `after_stat(prop)` to calculate proportions use `after_stat(count)`. Label the y-axis using percentages. Hint: check out the scales package that we loaded. +2pts
@@ -1063,21 +810,10 @@ ggplot(diamonds, aes(
   geom_bar()
 ```
 
+```{r}
+# Your code here
 
-::: {.fold .s .o}
-**Ans-2.5.1.5b:**
-```{r fig.width = 5}
-
-# We can use the calculated value of `count` in `geom_bar` instead of `prop` as `count` is calculated for each group. 
-
-ggplot(diamonds, aes(
-  x = cut,
-  fill = color,
-  y = after_stat(count / sum(count)))) +
-  geom_bar() +
-  scale_y_continuous(labels = percent)
 ```
-:::
 
 ## Position adjustments
 
@@ -1172,11 +908,8 @@ ggplot(mpg, aes(x = cty, y = hwy)) +
   geom_point()
 ```
 
-::: {.fold .s .o}
-**Ans-2.6.1.1:**
+**Your answer here:**
 
-The `mpg` dataset has 234 observations, however the plot shows fewer observations than that. This is due to overplotting; many cars have the same city and highway mileage. This can be addressed by jittering the points.
-:::
 
 2. What, if anything, is the difference between these two plots? Why? +2pts
 
@@ -1190,11 +923,8 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point(position = "identity") 
 ```
 
-::: {.fold .s .o}
-**Ans-2.6.1.2:**
+**Your answer here:**
 
-They are identical because position = "identity" is the default value for `geom_point`.
-:::
 
 3. What parameters to `geom_jitter()` control the amount of jittering? Add jittering to the following plot: +2pts
 
@@ -1205,19 +935,12 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point() 
 ```
 
-::: {.fold .s .o}
-**Ans-2.6.1.3:**
+**Your answer here:**
 
-```{r fig.width = 5}
-# The `width` and `height` parameters control the amount of horizontal and vertical displacement, respectively. 
+```{r}
+# Your code here
 
-# Higher values mean more displacement. In the plot below you can see the non-jittered points in pink and the jittered points in black.
-
-ggplot(mpg, aes(x = displ, y = hwy)) + 
-  geom_point(color = "pink") +
-  geom_jitter(height = 1, width = 1) 
 ```
-:::
 
 4. Compare and contrast `geom_jitter()` with `geom_count()` using the following ggplot. +2pts
 
@@ -1227,19 +950,12 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
 g <- ggplot(mpg, aes(x = displ, y = hwy))
 ```
 
-::: {.fold .s .o}
-**Ans-2.6.1.4:**
+**Your answer here:**
 
-```{r fig.align = "center", out.width = "50%", fig.show = "hold"}
+```{r}
+# Your code here
 
-# `geom_jitter()` adds random noise to the location of the points to avoid overplotting.
-
-# `geom_count()` sizes the points based on the number of observations at a given location.
-
-g + geom_jitter()
-g + geom_count()
 ```
-:::
 
 5. What's the default position adjustment for `geom_boxplot()`? Create a visualization of the `mpg` dataset that demonstrates it by adding the default position using the following ggplot: +2pts
 
@@ -1249,17 +965,12 @@ g + geom_count()
 g <- ggplot(data = mpg, mapping = aes(x = manufacturer, y = hwy, color = manufacturer))
 ```
 
-::: {.fold .s .o}
-**Ans-2.6.1.5:**
+**Your answer here:**
 
-```{r fig.width = 10, fig.align = "center", out.width = "50%", fig.show = "hold"}
-
-# The default position for `geom_boxplot()` is `"dodge2"`.
-g + geom_boxplot()
-g + geom_boxplot(position = "dodge2")
+```{r}
+# Your code here
 
 ```
-:::
 
 ## Grammar of graphics
 
@@ -1294,12 +1005,13 @@ choose a geometric object to represent each observation in the
 transformed data. You could then use the aesthetic properties of the
 `geoms` to represent variables in the data. You would map the values of
 each variable to the levels of an aesthetic. These steps are illustrated
-in Figure \@ref(fig:visualization-grammar). You'd then select a coordinate
+in \@ref(fig:visualization-grammar). You'd then select a coordinate
 system to place the `geoms` into, using the location of the objects (which
 is itself an aesthetic property) to display the values of the x and y
 variables.
 
-```{r visualization-grammar, echo = FALSE, fig.cap = 'The layered grammar of graphics showing how data is transformed into a plot through statistical transformation, geometric objects, aesthetic mappings, and coordinate systems.'}
+```{r visualization-grammar, echo = FALSE}
+
 knitr::include_graphics("images/visualization-grammar.png")
 ```
 

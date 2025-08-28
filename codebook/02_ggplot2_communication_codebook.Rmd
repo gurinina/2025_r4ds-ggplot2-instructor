@@ -1,7 +1,7 @@
 # Communication {#sec-communication}
 Total points: 49
 
-"The simple graph has brought more information to the data analyst's mind than any other device." --- John Tukey
+"The simple graph has brought more information to the data analyst's mind than any other device." — John Tukey
 
 ## Introduction
 
@@ -16,6 +16,11 @@ We particularly like [The Truthful Art](https://www.amazon.com/gp/product/032193
 In this chapter, we'll focus once again on `ggplot2`. We'll also use a little **dplyr** for data manipulation, **scales** to override the default breaks, labels, transformations and palettes, and a few `ggplot2` extension packages, including **ggrepel** ([https://ggrepel.slowkow.com](https://ggrepel.slowkow.com/)) by Kamil Slowikowski and **patchwork** ([https://patchwork.data-imaginist.com](https://patchwork.data-imaginist.com/)) by Thomas Lin Pedersen.
 
 First install the packages `patchwork`, `ggthemes` and `scales` if you haven't already done so by uncommenting this code:
+
+```{r}
+# install.packages(c("patchwork","scales","ggthemes"))
+```
+
 
 ```{r}
 
@@ -71,25 +76,10 @@ ggplot(df, aes(x, y)) +
 
 1. Create a boxplot on the fuel economy data with x = `hwy` and y = `class` with a customized `title`, `subtitle`, `caption`, `x`, `y`, and `color` labels. +8pts
 
-::: {.fold .s .o}
-**Ans-1.2.1.1:**
-```{r Ans-1.2.1.1}
+```{r}
+# Your code here
 
-
-ggplot(
-  data = mpg,
-  mapping = aes(x = class, y = hwy, fill = class)) +
-  geom_boxplot() + 
-  labs(
-    title = "Compact Cars have > 10 Hwy MPG than Pickup Trucks",
-    subtitle = "Comparing the median highway mpg in each class",
-    caption = "Data from fueleconomy.gov",
-    x = "Car Class",
-    y = "Highway Miles per Gallon",
-    fill = "car class"
-  )
 ```
-:::
 
 2. Recreate the following plot using the fuel economy data. Note that both the colors and shapes of points vary by type of drive train. +6pts
 
@@ -99,25 +89,10 @@ ggplot(
 knitr::include_graphics("images/fueleconomy.png")
 ```
 
-::: {.fold .s .o}
-**Ans-1.2.1.2:**
-```{r Ans-1.2.1.2, echo = FALSE}
-ggplot(mpg, aes(
-  x = cty,
-  y = hwy,
-  color = drv,
-  shape = drv
-)) +
-  geom_point() +
-  labs(
-    x = "City MPG",
-    y = "Highway MPG",
-    shape = "Type of\ndrive train",
-    color = "Type of\ndrive train"
-  )
-```
-:::
+```{r}
+# Your code here
 
+```
 
 ## Annotations
 
@@ -143,9 +118,10 @@ label_info <- mpg |>
     )
   ) |> select(displ, hwy, drv, drive_type)
 
+label_info
 ```
-
 **Notice that `displ` values in `label_info` have captured the right-most point for each drive type.**
+
 Then, we use this new data frame to directly label the three groups to replace the legend with labels placed directly on the plot. Using the `fontface` and `size` arguments we can customize the look of the text labels.
 
 They're larger than the rest of the text on the plot and bolded.
@@ -196,7 +172,7 @@ Note another handy technique used here: we added a second layer of large, hollow
 
 potential_outliers <- mpg |>
   filter(hwy > 40 | (hwy > 20 & displ > 5))
-
+  
 ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point() +
   geom_text_repel(data = potential_outliers, aes(label = model)) +
@@ -216,7 +192,7 @@ A couple ideas:
 
 -   Use `geom_rect()` to draw a rectangle around points of interest.
     The boundaries of the rectangle are defined by aesthetics `xmin`, `xmax`, `ymin`, `ymax`.
-
+    
 -   Use `geom_segment()` with the `arrow` argument to draw attention to a point with an arrow.
     Use aesthetics `x` and `y` to define the starting location, and `xend` and `yend` to define the end location.
 
@@ -227,7 +203,8 @@ To demonstrate using `annotate()`, let's create some text to add to our plot.
 The text is a bit long, so we'll use `stringr::str_wrap()` to automatically add line breaks to it given the number of characters you want per line:
 
 ```{r}
-trend_text <- str_wrap("Larger engine sizes tend to have lower fuel economy.", width = 30)
+trend_text <- "Larger engine sizes tend to have lower fuel economy." |> 
+  str_wrap(width = 30)
 ```
 
 Then, we add two layers of annotation: one with a label `geom` and the other with a segment geom.
@@ -237,12 +214,12 @@ Note also that the segment is styled as an arrow.
 
 `annotate` is a very flexible function that can be used to add a wide variety of annotations to your plots. You can add text, points, lines, and more.
 
-```{r tidy=FALSE}
+```{r}
 
 ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point() +
   annotate(
-    geom = "label",
+    geom = "label",  
     x = 3.5,
     y = 38,
     label = trend_text, # the text to display
@@ -269,33 +246,10 @@ The only limit is your imagination (and your patience with positioning annotatio
 
 1. Use `geom_text()` with infinite positions to place text at the four corners of the plot. **Hint: construct a `data.frame` similar to `label_info` with `hjust` and `vjust` and to set the coordinate positions.** +2pts
 
-::: {.fold .s .o}
-**Ans-1.3.1.1:**
-```{r Ans-1.3.1.1}
+```{r}
+# Your code here
 
-# We can use similar code as the example in the text. However, I need to use `vjust` and `hjust` in order for the text to appear in the plot, and these need to be different for each corner. But, `geom_text()` takes `hjust` and `vjust` as aesthetics, I can add them to the data and mappings, and use a single `geom_text()` call instead of four different `geom_text()` calls with four different data arguments, and four different values of `hjust` and `vjust` arguments.
-
-label <- tibble(
-  displ = c(Inf, Inf, -Inf, -Inf),
-  hwy = c(Inf, -Inf, Inf, -Inf),
-  label = c("Top right", "Bottom right", "Top left", "Bottom left"),
-  vjust = c("top", "bottom", "top", "bottom"),
-  hjust = c("right", "right", "left", "left")
-)
-
-ggplot(mpg, aes(displ, hwy)) +
-  geom_point() +
-  geom_text(aes(
-    x = displ,
-    y = hwy,
-    label = label,
-    vjust = vjust,
-    hjust = hjust
-  ),
-  data = label)
 ```
-:::
-
 
 2. Use `annotate()` to add a point `geom` in the middle of the following plot without having to create a tibble. Customize the shape, size, or color of the point. +2pts
 
@@ -304,24 +258,10 @@ ggplot(mpg, aes(displ, hwy)) +
   geom_point() 
 ```
 
-::: {.fold .s .o}
-**Ans-1.3.1.2:**
-```{r Ans-1.3.1.2}
-
-ggplot(mpg, aes(displ, hwy)) + geom_point() +
-  annotate(
-    "point",
-    x = 5,
-    y = 35,
-    color = "red",
-    shape = 24,
-    size = 5,
-    fill = "blue"
-  )
-
+```{r}
+# Your code here
 
 ```
-:::
 
 3.  
     a). How do labels with `geom_text()` interact with faceting? Try it by adding a geom_text element to: +2pts
@@ -331,162 +271,48 @@ ggplot(mpg, aes(displ, hwy)) + geom_point() +
 g <- ggplot(mpg, aes(displ, hwy)) + geom_point()
 ```
 
-::: {.fold .s .o}
-**Ans-1.3.1.3a:**
-```{r Ans-1.3.1.3a}
+**Your answer here:**
 
-#  If the facet variable is not specified, the text is drawn in all facets.
+```{r}
+# Your code here
 
-label <- tibble(displ = Inf,
-                hwy = Inf,
-                label = "Increasing engine size is \nrelated to decreasing fuel economy.")
-
-g +  geom_text(
-  aes(label = label),
-  data = label,
-  color = "red",
-  vjust = "top",
-  hjust = "right",
-  size = 4
-) + facet_wrap( ~ class)
 ```
-:::
 
 3.  
     b). How can you add a label to a single facet? +2pts
-    
-::: {.fold .s .o}
-**Ans-1.3.1.3b:**
-```{r Ans-1.3.1.3b}
 
-# To draw the label in only one facet, add a column to the label data frame with the value of the faceting variable(s) in which to draw it.
+**Your answer here:**
 
-label <- tibble(
-  displ = Inf,
-  hwy = Inf,
-  class = "2seater",
-  label = "Increasing engine size is \nrelated to decreasing fuel economy."
-)
+```{r}
+# Your code here
 
-ggplot(mpg, aes(displ, hwy)) +
-  geom_point() +
-  geom_text(
-    aes(label = label),
-    data = label,
-    vjust = "top",
-    hjust = "right",
-    size = 3
-  ) + facet_wrap( ~ class)
 ```
-:::
 
 3. 
     c). How can you put a different label in each facet? (Hint: Think about the dataset that is being passed to `geom_text()`.) +2pts
-    
-::: {.fold .s .o}
-**Ans-1.3.1.3c:**
-```{r Ans-1.3.1.3c}
 
-# To draw labels in different plots, simply have the faceting variable(s):
+**Your answer here:**
 
-label <- tibble(
-  displ = Inf,
-  hwy = Inf,
-  class = unique(mpg$class),
-  label = paste0("Label for ", class)
-)
+```{r}
+# Your code here
 
-ggplot(mpg, aes(displ, hwy)) +
-  geom_point() +
-  geom_text(aes(label = label),
-            data = label, vjust = "top", hjust = "right",
-            size = 3
-  ) + facet_wrap(~class)
 ```
-:::
 
 4.  What arguments to `geom_label()` control the appearance of the background box? +3pts
 
-::: {.fold .s .o}
-**Ans-1.3.1.4:**
+**Your answer here:**
 
-- `label.padding`: padding around label
-- `label.r`: amount of rounding in the corners
-- `label.size`: size of label border
-:::
 
 5. What are the four arguments to `arrow()`?
     How do they work?
     Create a series of plots that demonstrate the most important options. +4pts
 
-::: {.fold .s .o}
-**Ans-1.3.1.5:**
-```{r Ans-1.3.1.5}
+**Your answer here:**
 
-cat("
--   `angle` : angle of arrow head\n
--   `length` : length of the arrow head\n
--   `ends`: ends of the line to draw arrow head\n
--   `type`: 'open' or 'close': whether the arrow head is a closed or open triangle")
+```{r}
+# Your code here
 
-#type
-ggplot(data=NULL)+
-  annotate(
-    geom = "segment",
-    x = 1, y = 1, xend = 10, yend = 10, color = "hotpink",
-    arrow = arrow(type = "closed")
-  )+
-  annotate(
-    geom = "segment",
-    x = 1, y = 2, xend = 9, yend = 10, color = "hotpink",
-    arrow = arrow(type = "open")
-  )
-
-#angle
-ggplot(data=NULL)+
-  annotate(
-    geom = "segment",
-    x = 1, y = 1, xend = 10, yend = 10, color = "hotpink",
-    arrow = arrow(angle = 1)
-  )+
-  annotate(
-    geom = "segment",
-    x = 1, y = 2, xend = 9, yend = 10, color = "hotpink",
-    arrow = arrow(angle = 100)
-  )
-
-#length
-ggplot(data = NULL) +
-  annotate(
-    geom = "segment",
-    x = 1, y = 1, xend = 10, yend = 10, color = "hotpink",
-    arrow = arrow(length = unit(0.1, "inches"))
-  ) +
-  annotate(
-    geom = "segment",
-    x = 1, y = 2, xend = 9, yend = 10, color = "hotpink",
-    arrow = arrow(length = unit(1, "inches"))
-  )
-
-#ends
-ggplot(data = NULL) +
-  annotate(
-    geom = "segment",
-    x = 1, y = 1, xend = 10, yend = 10, color = "hotpink",
-    arrow = arrow(ends = "both")
-  ) +
-  annotate(
-    geom = "segment",
-    x = 1, y = 2, xend = 9, yend = 10, color = "hotpink",
-    arrow = arrow(ends = "last")
-  ) +
-  annotate(
-    geom = "segment",
-    x = 2, y = 1, xend = 10, yend = 9, color = "hotpink",
-    arrow = arrow(ends = "first")
-  )
 ```
-:::
 
 ## Scales
 
@@ -697,7 +523,7 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
 ```
 
 The ColorBrewer scales are documented online at <https://colorbrewer2.org/> and made available in R via the **RColorBrewer** package, by Erich Neuwirth.
-Figure \@ref(fig:fig-brewer) shows the complete list of all palettes.
+\@ref(fig:fig-brewer) shows the complete list of all palettes.
 
 The sequential (top) and diverging (bottom) palettes are particularly useful if your categorical values are ordered, or have a "middle".
 This often arises if you've used `cut()` to make a continuous variable into a categorical variable.
@@ -714,10 +540,9 @@ For example, if we map presidential party to color, we want to use the standard 
 
 One approach for assigning these colors is using hex color codes:
 
-```{r, tidy=FALSE}
-# `row_number()` is a function that returns the row number of a data frame
-presidential |> 
-  mutate(id = 33 + row_number()) |>
+```{r}
+
+presidential |> mutate(id = 33 + row_number()) |> # `row_number()` is a function that returns the row number of a data frame
   ggplot(aes(x = start, y = id, color = party)) +
   geom_point() +
   geom_segment(aes(xend = end, yend = id)) +
@@ -828,44 +653,21 @@ ggplot(df) +
        
 ```
 
-::: {.fold .s .o}
-**Ans-1.4.1.1:**
-```{r Ans-1.4.1.1}
+**Your answer here:**
 
-# It does not override the default scale because the colors for the default point `shape = 19` ("filled circle") in `geom_point()` are set by the `color` aesthetic, not the `fill` aesthetic.
+```{r}
+# Your code here
 
-ggplot(df) +
-  geom_point(aes(x = x, y = y, color = x)) +
-    scale_color_gradient(low = "yellow", high = "red")
 ```
-:::
 
 2. What is the first argument to every scale? How does it compare to `labs()`? +2pts
-    
-::: {.fold .s .o}
-**Ans-1.4.1.2:**
-```{r Ans-1.4.1.2}
 
-# The first argument to every scale is the label for the scale. It is equivalent to using the `labs` function.
+**Your answer here:**
 
+```{r}
+# Your code here
 
-ggplot(mpg, aes(displ, hwy)) +
-  geom_point(aes(colour = class)) +
-  geom_smooth(se = FALSE) +
-  labs(
-    x = "Engine displacement (L)",
-    y = "Highway fuel economy (mpg)",
-    colour = "Car type"
-  )
-
-ggplot(mpg, aes(displ, hwy)) +
-  geom_point(aes(colour = class)) +
-  geom_smooth(se = FALSE) +
-  scale_x_continuous("Engine displacement (L)") +
-  scale_y_continuous("Highway fuel economy (mpg)") +
-  scale_colour_discrete("Car type")
 ```
-:::
 
 3. First, create the following plot. Then, modify the code using `override.aes` to make the legend easier to see. +2pts
 ```{r, results='hide', fig.show = 'hide'}
@@ -874,18 +676,10 @@ ggplot(diamonds, aes(x = carat, y = price)) +
   geom_point(aes(color = cut), alpha = 1 / 20)
 ```
 
-::: {.fold .s .o}
-**Ans-1.4.1.3:**
-```{r Ans-1.4.1.3}
+```{r}
+# Your code here
 
-# The problem with the legend is that the `alpha` value make the colors hard to see. So I'll override the alpha value to make the points solid in the legend.
-
-ggplot(diamonds, aes(carat, price)) +
-  geom_point(aes(colour = cut), alpha = 1 / 20) +
-  theme(legend.position = "bottom") +
-  guides(colour = guide_legend(nrow = 1, override.aes = list(alpha = 1)))
 ```
-:::
 
 ## Themes {#sec-themes}
 
@@ -899,7 +693,7 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
   theme_classic()
 ```
 
-`ggplot2` includes the eight themes shown in Figure \@ref(fig:fig-themes), with `theme_gray()` as the default.[^communication-2]
+`ggplot2` includes the eight themes shown in \@ref(fig:fig-themes), with `theme_gray()` as the default.[^communication-2]
 
 Many more are included in add-on packages like **ggthemes** (<https://jrnold.github.io/ggthemes>), by Jeffrey Arnold.
 
@@ -912,7 +706,7 @@ You can also set default theme to have a white background by using:
 Setting ggplot2 theme
 `ggplot2::theme_set(ggplot2::theme_bw())`
 
-```{r fig-themes, echo = FALSE, fig.cap = 'The eight themes built-in to ggplot2.'}
+```{r fig-themes, echo = FALSE, fig.cap = 'The eight themes built-in to `ggplot2`.'}
 
 knitr::include_graphics("images/visualization-themes.png")
 ```
@@ -972,33 +766,17 @@ ggplot(mpg, aes(x = displ, y = hwy, color = drv)) +
   )
 ```
 
-::: {.fold .s .o}
-**Ans-1.5.1.1:**
-```{r Ans-1.5.1.1}
-ggplot(mpg, aes(x = displ, y = hwy, color = drv)) +
-  geom_point() +
-  labs(
-    title = "Larger engine sizes tend to have lower fuel economy",
-    caption = "Source: https://fueleconomy.gov."
-  ) + theme_solarized()
+```{r}
+# Your code here
+
 ```
-:::
 
 2. Make the axis labels of your plot blue and bolded. +4pts
 
-::: {.fold .s .o}
-**Ans-1.5.1.2:**
-```{r Ans-1.5.1.2}
-
-ggplot(mpg, aes(x = displ, y = hwy, color = drv)) +
-  geom_point() +
-  labs(
-    title = "Larger engine sizes tend to have lower fuel economy",
-    caption = "Source: https://fueleconomy.gov.") + theme_solarized() + 
-  theme(axis.text = element_text(color = "blue", face = "bold"))
+```{r}
+# Your code here
 
 ```
-:::
 
 ## Layout
 
@@ -1114,26 +892,12 @@ p3 <- ggplot(mpg, aes(x = cty, y = hwy)) +
 (p1 | p2) / p3
 ```
 
-::: {.fold .s .o}
-**Ans-1.6.1.1:**
-```{r Ans-1.6.1.1}
+**Your answer here:**
 
-# It plots the first plot in the left half of the plot window and the second and third plots in the right half of the plot window; top and bottom.
-# This happens because the `/` takes precedence over the `+` or `|` statements, like they do in mathematics: 3 + 4/5 vs. (3 + 4)/5
+```{r}
+# Your code here
 
-p1 <- ggplot(mpg, aes(x = displ, y = hwy)) +
-  geom_point() +
-  labs(title = "Plot 1")
-p2 <- ggplot(mpg, aes(x = drv, y = hwy)) +
-  geom_boxplot() +
-  labs(title = "Plot 2")
-p3 <- ggplot(mpg, aes(x = cty, y = hwy)) +
-  geom_point() +
-  labs(title = "Plot 3")
-
-p1 | p2 / p3
 ```
-:::
 
 2. Using the three plots from the previous exercise, recreate the following patchwork. +4pts
 
@@ -1142,19 +906,10 @@ p1 | p2 / p3
 knitr::include_graphics("images/3-plots.png")
 ```
 
-::: {.fold .s .o}
-**Ans-1.6.1.2:**
-```{r, fig.width = 8, fig.asp = 0.8, echo = FALSE}
+```{r}
+# Your code here
 
-p1 / (p2 + p3) +
-  plot_annotation(
-    tag_levels = c("A"),
-    
-    tag_prefix = "Fig. ",
-    tag_suffix = ":"
-  )
 ```
-:::
 
 ## Summary
 

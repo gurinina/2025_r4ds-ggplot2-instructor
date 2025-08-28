@@ -13,12 +13,18 @@ We’ll keep all personal work inside a folder named **`students_notes/`** at th
 
 ## One‑time setup (RStudio UI only)
 **Make your personal codebook from the template**
+
    - In the **Files** pane, navigate to `lessons/` and locate:  
      **`01_ggplot2_layers.Rmd`**
+     
    - Check the box next to that file → click **More** → **Copy To…**
-   - In the dialog, choose the **`students_notes/`** folder and set the new name to:  
+   
+   - In the dialog, choose the **`students_notes/`** folder and set the new name to: 
+   
      **`<lastname>01_ggplot2_layers.Rmd`** (for example, `garcia_09_codebook.Rmd`) → **OK**.
+     
    - Click the new file in `students_notes/` to open it. This is now **your** working copy.
+   
    - Do the same thing for the file **'02_ggplot2_communication.Rmd'**
 
 > From now on, **work only inside `students_notes/`**. Anything you create or edit there is yours and won’t interfere with course updates.

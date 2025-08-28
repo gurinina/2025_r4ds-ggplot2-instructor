@@ -1,4 +1,4 @@
-Layers: 30' no exercises
+Layers: 33' up to facets
 
 51' up to statistical TF
 
@@ -10,7 +10,6 @@ This module is about ggplot2.
 The first chapter is more about the principles of effective ggplots (e.g. labels, layout annotation)
 while the second chapter is more about the types of ggplot2 geoms that are commonly used in the field
 of statistics and what happens under the hood of ggplot2.
-
 
 mpg greater the engine size displacement the lower the mpg
 
