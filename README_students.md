@@ -23,11 +23,11 @@ We’ll keep all personal work inside a folder named **`students_notes/`** at th
    
      **`<lastname>01_ggplot2_layers_codebook.Rmd`** (for example, `garcia_01_ggplot2_layers_codebook.Rmd`) → **OK**.
      
-   - Click the new file in `students_notes/` to open it. This is now **your** working copy.
-   
    - Do the same thing for the file **'02_ggplot2_communication.Rmd'**
    
    - Set the new name to **`<lastname>01_ggplot2_communication_codebook.Rmd**
+   
+   - Click the new files in `students_notes/` to open them. These are now **your** working copies for the homework.
 
 > From now on, **work only inside `students_notes/`**. Anything you create or edit there is yours and won’t interfere with course updates.
 
