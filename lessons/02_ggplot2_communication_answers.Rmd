@@ -1139,7 +1139,7 @@ p1 | p2 / p3
 
 ```{r 3-plots, echo = FALSE, fig.cap = 'Scatterplot of highway versus city fuel efficiency.'}
 
-knitr::include_graphics("images/3-plots.png")
+knitr::include_graphics("images/3plots.png")
 ```
 
 ::: {.fold .s .o}
