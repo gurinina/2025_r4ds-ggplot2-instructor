@@ -16,6 +16,8 @@ We’ll keep all personal work inside a folder named **`students_notes/`** at th
 
    - In the **Files** pane, navigate to `lessons/` and locate:  
      **`01_ggplot2_layers.Rmd`**
+     In this chapter, you’ll expand on your ggplot2 foundation. We’ll start with a deeper dive into aesthetic mappings, 
+     geometric objects, and facets.
      
    - Check the box next to that file → click **More** → **Copy To…**
    
@@ -24,6 +26,7 @@ We’ll keep all personal work inside a folder named **`students_notes/`** at th
      **`<lastname>01_ggplot2_layers_codebook.Rmd`** (for example, `garcia_01_ggplot2_layers_codebook.Rmd`) → **OK**.
      
    - Do the same thing for the file **'02_ggplot2_communication.Rmd'**
+     This chapter will focus on making effective figures for publication purposes.
    
    - Set the new name to **`<lastname>01_ggplot2_communication_codebook.Rmd**
    
