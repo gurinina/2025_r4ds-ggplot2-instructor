@@ -1,8 +1,10 @@
 bookdown::gitbook:
-  fig_caption: false  # Disable figure captions in Gitbook
-  css: [css/git.css,css/toc.css]
+  fig_caption: false
+  css: [css/git.css, css/toc.css]
   includes:
-    highlight: tango
+    in_header: includes/header.html
+    after_body: scripts/collapse-output.html
+  highlight: tango
   df_print: kable
   mathjax: default
   config:
